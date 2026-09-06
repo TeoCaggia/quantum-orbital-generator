@@ -21,7 +21,7 @@ export class LabeledAxes extends Group {
       const canvas = document.createElement('canvas');
       canvas.width = canvas.height = 128;
       const context = canvas.getContext('2d');
-      context.font = '400 88px Syne, system-ui, sans-serif';
+      context.font = '400 105.6px Syne, system-ui, sans-serif';
       context.textAlign = 'center';
       context.textBaseline = 'middle';
       context.lineWidth = 10;

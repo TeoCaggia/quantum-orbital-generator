@@ -38,6 +38,17 @@ const PERIODIC_SERIES_MARKERS = [
   { label: '**', row: 10, column: 2 },
 ];
 
+// Ratios measured from the reference layout in Screenshot 2026-09-07 002504.
+// Every periodic-table text size is derived from the untransformed cell side;
+// the common panel scale then preserves the same proportions on screen.
+const PERIODIC_TYPOGRAPHY_RATIOS = {
+  title: 0.4572,
+  symbol: 0.2353,
+  atomicNumber: 0.1775,
+  seriesMarker: 0.3227,
+  unavailableMessage: 0.2259,
+};
+
 // Canvas labels and identity text must be rendered only after the bundled
 // variable font has loaded at every weight used by the interface.
 await Promise.all([
@@ -133,6 +144,17 @@ class DesktopViewer extends Viewer {
     this.unavailableMessage.setAttribute('aria-live', 'polite');
     this.unavailableMessage.textContent = 'Il modello orbitalico di questo elemento non è ancora stato generato';
     el.append(this.unavailableMessage);
+    const updatePeriodicTypography = () => {
+      const referenceCell = periodicTable.querySelector('.periodic-element');
+      const cellSize = Number.parseFloat(getComputedStyle(referenceCell).width);
+      if (!(cellSize > 0)) return;
+      for (const [name, ratio] of Object.entries(PERIODIC_TYPOGRAPHY_RATIOS)) {
+        el.style.setProperty(`--periodic-${name}-font-size`, `${(cellSize * ratio).toFixed(3)}px`);
+      }
+    };
+    this.periodicTypographyObserver = new ResizeObserver(updatePeriodicTypography);
+    this.periodicTypographyObserver.observe(periodicTable);
+    requestAnimationFrame(updatePeriodicTypography);
     const display = document.createElement('div');
     display.className = 'display-actions';
     this.displayButtons = [];

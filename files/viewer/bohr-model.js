@@ -494,7 +494,7 @@ export class BohrModel {
     this.nucleusHitArea = null;
     if (!shells.length) {
       context.fillStyle = '#aab2bd';
-      context.font = '400 14px Syne, system-ui, sans-serif';
+      context.font = '400 16.8px Syne, system-ui, sans-serif';
       context.textAlign = 'center';
       context.fillText('Configurazione elettronica non disponibile', size / 2, size / 2);
       return;
@@ -545,7 +545,7 @@ export class BohrModel {
 
     // Cut a genuinely transparent gap in each orbit before placing its label.
     // Labels precede particles and nucleus, which remain legible if they overlap.
-    context.font = '400 12px Syne, system-ui, sans-serif';
+    context.font = '400 14.4px Syne, system-ui, sans-serif';
     context.textAlign = 'center';
     context.textBaseline = 'alphabetic';
     for (const { label, x, y } of shellLabelPositions) {
@@ -579,7 +579,7 @@ export class BohrModel {
     context.lineWidth = 1.5;
     context.stroke();
     context.fillStyle = '#161616';
-    const symbolSize = Math.max(8, displayedNucleusRadius * 0.92);
+    const symbolSize = Math.max(9.6, displayedNucleusRadius * 1.104);
     context.font = `400 ${symbolSize}px Syne, system-ui, sans-serif`;
     context.textBaseline = 'alphabetic';
     context.textAlign = 'center';
