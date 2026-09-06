@@ -1,0 +1,3296 @@
+{
+  "element": "Fm",
+  "atomic_number": 100,
+  "units": {
+    "coordinates": "angstrom",
+    "volume": "bohr^3 and angstrom^3"
+  },
+  "method": {
+    "radial": "hydrogen-like radial functions with Slater-rule Z_eff",
+    "angular": "real normalized spherical harmonics",
+    "colours": "s=red, p=yellow, d=cyan, f=green",
+    "contour": "every radial and angular nodal region normalized to its own peak (s, p, d, f)",
+    "volume": "adaptive voxel estimate per radial region above the lobe-normalized display cutoff",
+    "lobe_normalization": "local radial peak times local polar peak; azimuthal sectors have equal peaks",
+    "interpretation": "display normalization only; physical probability density and nodes are unchanged",
+    "minimum_points_per_lobe": 16,
+    "lobe_sampling": "uniform baseline plus support points where needed to reach 16 in every connected lobe",
+    "isovalue": 0.5,
+    "baseline_points_per_orbital": 5000,
+    "border_highlight": 5.0,
+    "border_gradient": "within each lobe, sample proportional to H**t-1; t=clip(1-distance/(0.2*lobe_depth), 0, 1)",
+    "border_sampling": "visual coverage proportional to surface_area**0.75, balancing surface fill and outline continuity; preserve baseline",
+    "border_area_exponent": 0.75,
+    "border_surface_area": "marching tetrahedra of the continuous contour, including all inner and outer surfaces",
+    "minimum_border_points_per_lobe": 1,
+    "border_distance_grid": "128 + 32*l per axis per radial region, independent of volume resolution; approximate signed Euclidean distance",
+    "grid_resolution": 72,
+    "adaptive_volume_grid": "max(requested resolution, 64 + 20*l) per orbital",
+    "gltf_orbital_nodes": "GLB/glTF exports contain one named point-cloud node per orbital",
+    "generation_mode": "serial",
+    "parallel_workers": 1
+  },
+  "orbitals": [
+    {
+      "label": "1s",
+      "n": 1,
+      "l": 0,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 99.7,
+      "volume_bohr3": 1.7601637993230707e-07,
+      "volume_angstrom3": 2.6082936474643504e-08,
+      "point_count": 9077,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.00015184368822384974
+      ],
+      "border_target_point_counts": [
+        4077.09895311437
+      ],
+      "border_point_counts": [
+        4077
+      ],
+      "connected_lobes": 1,
+      "lobe_point_counts": [
+        9077
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        3964107.892
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.07957747154594766
+      ]
+    },
+    {
+      "label": "2s",
+      "n": 2,
+      "l": 0,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 95.85,
+      "volume_bohr3": 0.0010110361341663472,
+      "volume_angstrom3": 0.000149820097829371,
+      "point_count": 6710,
+      "lobe_support_points": 15,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.00014997763700255,
+        0.062265439794559806
+      ],
+      "border_target_point_counts": [
+        18.23175104847812,
+        1676.848384977331
+      ],
+      "border_point_counts": [
+        18,
+        1677
+      ],
+      "connected_lobes": 2,
+      "lobe_point_counts": [
+        34,
+        6676
+      ],
+      "radial_nodes_bohr": [
+        0.020865936358894107
+      ],
+      "radial_peak_densities": [
+        440297.6383124999,
+        8064.332546894242
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.07957747154594766
+      ]
+    },
+    {
+      "label": "2px",
+      "n": 2,
+      "l": 1,
+      "real_m": 1,
+      "electrons": 2,
+      "z_effective": 95.85,
+      "volume_bohr3": 5.659497198268275e-05,
+      "volume_angstrom3": 8.38650959402898e-06,
+      "point_count": 8862,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.004511053122664708,
+        0.004511053122664709
+      ],
+      "border_target_point_counts": [
+        1930.661110651547,
+        1930.6611106515475
+      ],
+      "border_point_counts": [
+        1931,
+        1931
+      ],
+      "connected_lobes": 2,
+      "lobe_point_counts": [
+        4423,
+        4439
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        19862.601863144602
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.23873241463784306
+      ]
+    },
+    {
+      "label": "2py",
+      "n": 2,
+      "l": 1,
+      "real_m": -1,
+      "electrons": 2,
+      "z_effective": 95.85,
+      "volume_bohr3": 5.659497198268275e-05,
+      "volume_angstrom3": 8.38650959402898e-06,
+      "point_count": 8820,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.0045110531226647075,
+        0.004511053122664704
+      ],
+      "border_target_point_counts": [
+        1909.8764814699075,
+        1909.8764814699064
+      ],
+      "border_point_counts": [
+        1910,
+        1910
+      ],
+      "connected_lobes": 2,
+      "lobe_point_counts": [
+        4391,
+        4429
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        19862.601863144602
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.23873241463784306
+      ]
+    },
+    {
+      "label": "2pz",
+      "n": 2,
+      "l": 1,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 95.85,
+      "volume_bohr3": 5.659497198268275e-05,
+      "volume_angstrom3": 8.38650959402898e-06,
+      "point_count": 8860,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.0045110531226647075,
+        0.00451105312266471
+      ],
+      "border_target_point_counts": [
+        1929.891309570758,
+        1929.891309570759
+      ],
+      "border_point_counts": [
+        1930,
+        1930
+      ],
+      "connected_lobes": 2,
+      "lobe_point_counts": [
+        4423,
+        4437
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        19862.601863144602
+      ],
+      "polar_nodes_cos_theta": [
+        0.0
+      ],
+      "polar_peak_densities": [
+        0.23873241463784295,
+        0.23873241463784295
+      ]
+    },
+    {
+      "label": "3s",
+      "n": 3,
+      "l": 0,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 88.75,
+      "volume_bohr3": 0.018977259889500494,
+      "volume_angstrom3": 0.0028121397812578782,
+      "point_count": 6839,
+      "lobe_support_points": 16,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.00017223000653492041,
+        0.04927011910173371,
+        0.512196378203532
+      ],
+      "border_target_point_counts": [
+        3.8525682800318326,
+        267.9825035647551,
+        1551.4797389163891
+      ],
+      "border_point_counts": [
+        4,
+        268,
+        1551
+      ],
+      "connected_lobes": 3,
+      "lobe_point_counts": [
+        20,
+        427,
+        6392
+      ],
+      "radial_nodes_bohr": [
+        0.021430127196018976,
+        0.07997832350820637
+      ],
+      "radial_peak_densities": [
+        103562.21064814816,
+        1822.687322031786,
+        474.922894580399
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.07957747154594766
+      ]
+    },
+    {
+      "label": "3px",
+      "n": 3,
+      "l": 1,
+      "real_m": 1,
+      "electrons": 2,
+      "z_effective": 88.75,
+      "volume_bohr3": 0.0028088693708571803,
+      "volume_angstrom3": 0.00041623149728346666,
+      "point_count": 7904,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.0035364902303446056,
+        0.0035364902303446043,
+        0.0698916870664096,
+        0.06989168706640951
+      ],
+      "border_target_point_counts": [
+        139.95528491406847,
+        139.95528491406841,
+        1311.834651778141,
+        1311.83465177814
+      ],
+      "border_point_counts": [
+        140,
+        140,
+        1312,
+        1312
+      ],
+      "connected_lobes": 4,
+      "lobe_point_counts": [
+        174,
+        177,
+        3770,
+        3783
+      ],
+      "radial_nodes_bohr": [
+        0.0676056338028169
+      ],
+      "radial_peak_densities": [
+        4894.290962969765,
+        580.8338792310063
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.23873241463784306
+      ]
+    },
+    {
+      "label": "3py",
+      "n": 3,
+      "l": 1,
+      "real_m": -1,
+      "electrons": 2,
+      "z_effective": 88.75,
+      "volume_bohr3": 0.0028088693708571803,
+      "volume_angstrom3": 0.00041623149728346666,
+      "point_count": 7916,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.0035364902303446056,
+        0.003536490230344604,
+        0.06989168706640958,
+        0.06989168706640957
+      ],
+      "border_target_point_counts": [
+        140.52467175262697,
+        140.52467175262694,
+        1317.1716519889303,
+        1317.17165198893
+      ],
+      "border_point_counts": [
+        141,
+        141,
+        1317,
+        1317
+      ],
+      "connected_lobes": 4,
+      "lobe_point_counts": [
+        178,
+        176,
+        3785,
+        3777
+      ],
+      "radial_nodes_bohr": [
+        0.0676056338028169
+      ],
+      "radial_peak_densities": [
+        4894.290962969765,
+        580.8338792310063
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.23873241463784306
+      ]
+    },
+    {
+      "label": "3pz",
+      "n": 3,
+      "l": 1,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 88.75,
+      "volume_bohr3": 0.0028088693708571803,
+      "volume_angstrom3": 0.00041623149728346666,
+      "point_count": 7910,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.003536490230344605,
+        0.003536490230344606,
+        0.06989168706640957,
+        0.06989168706640958
+      ],
+      "border_target_point_counts": [
+        140.23997833335528,
+        140.23997833335534,
+        1314.5031518836065,
+        1314.5031518836067
+      ],
+      "border_point_counts": [
+        140,
+        140,
+        1315,
+        1315
+      ],
+      "connected_lobes": 4,
+      "lobe_point_counts": [
+        179,
+        171,
+        3782,
+        3778
+      ],
+      "radial_nodes_bohr": [
+        0.0676056338028169
+      ],
+      "radial_peak_densities": [
+        4894.290962969765,
+        580.8338792310063
+      ],
+      "polar_nodes_cos_theta": [
+        0.0
+      ],
+      "polar_peak_densities": [
+        0.23873241463784295,
+        0.23873241463784295
+      ]
+    },
+    {
+      "label": "4s",
+      "n": 4,
+      "l": 0,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 72.25,
+      "volume_bohr3": 0.21467671944603764,
+      "volume_angstrom3": 0.031811807730901524,
+      "point_count": 6936,
+      "lobe_support_points": 16,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.00025848703923932095,
+        0.06840544494684872,
+        0.5195296888552265,
+        2.846797755151062
+      ],
+      "border_target_point_counts": [
+        1.332139993851363,
+        87.40550614227448,
+        399.8789710361433,
+        1432.149147976327
+      ],
+      "border_point_counts": [
+        1,
+        87,
+        400,
+        1432
+      ],
+      "connected_lobes": 4,
+      "lobe_point_counts": [
+        17,
+        115,
+        738,
+        6066
+      ],
+      "radial_nodes_bohr": [
+        0.025905113564680633,
+        0.0914991637185406,
+        0.21477565351262654
+      ],
+      "radial_peak_densities": [
+        23571.8447265625,
+        413.1296015223008,
+        99.66825374426891,
+        43.59928696577062
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.07957747154594766
+      ]
+    },
+    {
+      "label": "3dz2",
+      "n": 3,
+      "l": 2,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 78.85,
+      "volume_bohr3": 0.002665897859279067,
+      "volume_angstrom3": 0.00039504530509152497,
+      "point_count": 7843,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.020861124318026128,
+        0.12623882407435533,
+        0.02086112431802612
+      ],
+      "border_target_point_counts": [
+        485.495739954851,
+        1873.168497864063,
+        485.4957399548509
+      ],
+      "border_point_counts": [
+        485,
+        1873,
+        485
+      ],
+      "connected_lobes": 3,
+      "lobe_point_counts": [
+        1029,
+        5795,
+        1019
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        945.9340465361266
+      ],
+      "polar_nodes_cos_theta": [
+        -0.5773502691896257,
+        0.5773502691896257
+      ],
+      "polar_peak_densities": [
+        0.3978873577297383,
+        0.09947183943243458,
+        0.3978873577297383
+      ]
+    },
+    {
+      "label": "3dxz",
+      "n": 3,
+      "l": 2,
+      "real_m": 1,
+      "electrons": 2,
+      "z_effective": 78.85,
+      "volume_bohr3": 0.0011976827559078704,
+      "volume_angstrom3": 0.00017747827361939254,
+      "point_count": 8568,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.02217109493169764,
+        0.02217182266448008,
+        0.022171822664480065,
+        0.02217109493169765
+      ],
+      "border_target_point_counts": [
+        891.5072044460939,
+        891.5291511415071,
+        891.5291511415066,
+        891.5072044460941
+      ],
+      "border_point_counts": [
+        892,
+        892,
+        892,
+        892
+      ],
+      "connected_lobes": 4,
+      "lobe_point_counts": [
+        2143,
+        2143,
+        2130,
+        2152
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        945.9340465361266
+      ],
+      "polar_nodes_cos_theta": [
+        0.0
+      ],
+      "polar_peak_densities": [
+        0.29841551829730384,
+        0.29841551829730384
+      ]
+    },
+    {
+      "label": "3dyz",
+      "n": 3,
+      "l": 2,
+      "real_m": -1,
+      "electrons": 2,
+      "z_effective": 78.85,
+      "volume_bohr3": 0.0011976827559078704,
+      "volume_angstrom3": 0.00017747827361939254,
+      "point_count": 8576,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.02217109493169764,
+        0.022171822664480065,
+        0.02217182266448007,
+        0.022171094931697645
+      ],
+      "border_target_point_counts": [
+        893.6451114111811,
+        893.667110736559,
+        893.6671107365592,
+        893.6451114111813
+      ],
+      "border_point_counts": [
+        894,
+        894,
+        894,
+        894
+      ],
+      "connected_lobes": 4,
+      "lobe_point_counts": [
+        2151,
+        2142,
+        2148,
+        2135
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        945.9340465361266
+      ],
+      "polar_nodes_cos_theta": [
+        0.0
+      ],
+      "polar_peak_densities": [
+        0.29841551829730384,
+        0.29841551829730384
+      ]
+    },
+    {
+      "label": "3dx2-y2",
+      "n": 3,
+      "l": 2,
+      "real_m": 2,
+      "electrons": 2,
+      "z_effective": 78.85,
+      "volume_bohr3": 0.0011983312035288274,
+      "volume_angstrom3": 0.00017757436364300886,
+      "point_count": 8492,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.022171561928852408,
+        0.022171561928852404,
+        0.022171561928852404,
+        0.022171561928852408
+      ],
+      "border_target_point_counts": [
+        872.5136151044593,
+        872.5136151044592,
+        872.5136151044592,
+        872.5136151044593
+      ],
+      "border_point_counts": [
+        873,
+        873,
+        873,
+        873
+      ],
+      "connected_lobes": 4,
+      "lobe_point_counts": [
+        2120,
+        2116,
+        2128,
+        2128
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        945.9340465361266
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.29841551829730384
+      ]
+    },
+    {
+      "label": "3dxy",
+      "n": 3,
+      "l": 2,
+      "real_m": -2,
+      "electrons": 2,
+      "z_effective": 78.85,
+      "volume_bohr3": 0.0011976827559078704,
+      "volume_angstrom3": 0.00017747827361939254,
+      "point_count": 8576,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.022171822664480062,
+        0.02217109493169763,
+        0.022171822664480062,
+        0.022171094931697635
+      ],
+      "border_target_point_counts": [
+        893.6671107365504,
+        893.6451114111724,
+        893.6671107365504,
+        893.6451114111724
+      ],
+      "border_point_counts": [
+        894,
+        894,
+        894,
+        894
+      ],
+      "connected_lobes": 4,
+      "lobe_point_counts": [
+        2148,
+        2135,
+        2149,
+        2144
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        945.9340465361266
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.29841551829730384
+      ]
+    },
+    {
+      "label": "4px",
+      "n": 4,
+      "l": 1,
+      "real_m": 1,
+      "electrons": 2,
+      "z_effective": 72.25,
+      "volume_bohr3": 0.03716870603132885,
+      "volume_angstrom3": 0.005507833979046102,
+      "point_count": 7988,
+      "lobe_support_points": 22,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.004851540231196517,
+        0.0048515402311965165,
+        0.06822541986318954,
+        0.06822541986318956,
+        0.41654343938288935,
+        0.4165434393828891
+      ],
+      "border_target_point_counts": [
+        40.66516458487494,
+        40.66516458487493,
+        295.3061348376368,
+        295.3061348376368,
+        1146.9857717119335,
+        1146.985771711933
+      ],
+      "border_point_counts": [
+        41,
+        41,
+        295,
+        295,
+        1147,
+        1147
+      ],
+      "connected_lobes": 6,
+      "lobe_point_counts": [
+        57,
+        57,
+        453,
+        451,
+        3483,
+        3487
+      ],
+      "radial_nodes_bohr": [
+        0.07651022899654561,
+        0.2003063799999942
+      ],
+      "radial_peak_densities": [
+        1132.743876513888,
+        125.69680084981466,
+        47.92468927020844
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.23873241463784306
+      ]
+    },
+    {
+      "label": "4py",
+      "n": 4,
+      "l": 1,
+      "real_m": -1,
+      "electrons": 2,
+      "z_effective": 72.25,
+      "volume_bohr3": 0.03716870603132885,
+      "volume_angstrom3": 0.005507833979046102,
+      "point_count": 7982,
+      "lobe_support_points": 20,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.004851540231196515,
+        0.004851540231196516,
+        0.06822541986318956,
+        0.06822541986318954,
+        0.4165434393828892,
+        0.4165434393828892
+      ],
+      "border_target_point_counts": [
+        40.57812442094595,
+        40.578124420945954,
+        294.6740583503562,
+        294.6740583503561,
+        1144.5307507962884,
+        1144.5307507962884
+      ],
+      "border_point_counts": [
+        41,
+        41,
+        295,
+        295,
+        1145,
+        1145
+      ],
+      "connected_lobes": 6,
+      "lobe_point_counts": [
+        57,
+        57,
+        453,
+        454,
+        3476,
+        3485
+      ],
+      "radial_nodes_bohr": [
+        0.07651022899654561,
+        0.2003063799999942
+      ],
+      "radial_peak_densities": [
+        1132.743876513888,
+        125.69680084981466,
+        47.92468927020844
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.23873241463784306
+      ]
+    },
+    {
+      "label": "4pz",
+      "n": 4,
+      "l": 1,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 72.25,
+      "volume_bohr3": 0.03716870603132885,
+      "volume_angstrom3": 0.005507833979046102,
+      "point_count": 8010,
+      "lobe_support_points": 26,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.004851540231196514,
+        0.004851540231196516,
+        0.06822541986318956,
+        0.06822541986318956,
+        0.416543439382889,
+        0.41654343938288907
+      ],
+      "border_target_point_counts": [
+        40.92628507663831,
+        40.926285076638315,
+        297.2023642993081,
+        297.2023642993081,
+        1154.3508344582035,
+        1154.3508344582037
+      ],
+      "border_point_counts": [
+        41,
+        41,
+        297,
+        297,
+        1154,
+        1154
+      ],
+      "connected_lobes": 6,
+      "lobe_point_counts": [
+        57,
+        57,
+        449,
+        454,
+        3488,
+        3505
+      ],
+      "radial_nodes_bohr": [
+        0.07651022899654561,
+        0.2003063799999942
+      ],
+      "radial_peak_densities": [
+        1132.743876513888,
+        125.69680084981466,
+        47.92468927020844
+      ],
+      "polar_nodes_cos_theta": [
+        0.0
+      ],
+      "polar_peak_densities": [
+        0.23873241463784295,
+        0.23873241463784295
+      ]
+    },
+    {
+      "label": "5s",
+      "n": 5,
+      "l": 0,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 42.35,
+      "volume_bohr3": 4.200195506531351,
+      "volume_angstrom3": 0.6224047592620229,
+      "point_count": 7035,
+      "lobe_support_points": 27,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.0007504728440511386,
+        0.1923585872946157,
+        1.3619280261577382,
+        5.639127677869895,
+        22.15373938157232
+      ],
+      "border_target_point_counts": [
+        0.5902075327159061,
+        37.80830395874496,
+        164.10398577961774,
+        476.3349602839306,
+        1329.1952890314292
+      ],
+      "border_point_counts": [
+        1,
+        38,
+        164,
+        476,
+        1329
+      ],
+      "connected_lobes": 5,
+      "lobe_point_counts": [
+        17,
+        54,
+        236,
+        974,
+        5754
+      ],
+      "radial_nodes_bohr": [
+        0.04387791782653078,
+        0.15180844200981572,
+        0.3383222403594509,
+        0.6466289440781104
+      ],
+      "radial_peak_densities": [
+        2430.581692000001,
+        42.556928759939424,
+        10.163211713731389,
+        4.00799957789531,
+        2.2807958663447163
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.07957747154594766
+      ]
+    },
+    {
+      "label": "4dz2",
+      "n": 4,
+      "l": 2,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 60.85,
+      "volume_bohr3": 0.07562658748026264,
+      "volume_angstrom3": 0.011206704045386998,
+      "point_count": 8596,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.021429701177194,
+        0.12741150473389876,
+        0.021429701177193998,
+        0.2011182884140252,
+        1.2208257432419813,
+        0.20111828841402526
+      ],
+      "border_target_point_counts": [
+        96.50749864045562,
+        367.4560959911658,
+        96.50749864045561,
+        517.4729423220222,
+        2001.1941835488717,
+        517.4729423220223
+      ],
+      "border_point_counts": [
+        97,
+        367,
+        97,
+        517,
+        2001,
+        517
+      ],
+      "connected_lobes": 6,
+      "lobe_point_counts": [
+        115,
+        504,
+        118,
+        1040,
+        5784,
+        1035
+      ],
+      "radial_nodes_bohr": [
+        0.19720624486442073
+      ],
+      "radial_peak_densities": [
+        192.15479952345717,
+        36.52254174896936
+      ],
+      "polar_nodes_cos_theta": [
+        -0.5773502691896257,
+        0.5773502691896257
+      ],
+      "polar_peak_densities": [
+        0.3978873577297383,
+        0.09947183943243458,
+        0.3978873577297383
+      ]
+    },
+    {
+      "label": "4dxz",
+      "n": 4,
+      "l": 2,
+      "real_m": 1,
+      "electrons": 2,
+      "z_effective": 60.85,
+      "volume_bohr3": 0.0346328988293096,
+      "volume_angstrom3": 0.005132066120465848,
+      "point_count": 8456,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.022786499105111147,
+        0.02278672584198459,
+        0.02278672584198458,
+        0.022786499105111158,
+        0.21429181466978747,
+        0.2142898142340455,
+        0.21428981423404547,
+        0.21429181466978736
+      ],
+      "border_target_point_counts": [
+        135.6312828494686,
+        135.6322950466897,
+        135.63229504668965,
+        135.63128284946865,
+        728.3763769481843,
+        728.3712773419282,
+        728.3712773419281,
+        728.376376948184
+      ],
+      "border_point_counts": [
+        136,
+        136,
+        136,
+        136,
+        728,
+        728,
+        728,
+        728
+      ],
+      "connected_lobes": 8,
+      "lobe_point_counts": [
+        181,
+        179,
+        182,
+        183,
+        1928,
+        1938,
+        1936,
+        1929
+      ],
+      "radial_nodes_bohr": [
+        0.19720624486442073
+      ],
+      "radial_peak_densities": [
+        192.15479952345717,
+        36.52254174896936
+      ],
+      "polar_nodes_cos_theta": [
+        0.0
+      ],
+      "polar_peak_densities": [
+        0.29841551829730384,
+        0.29841551829730384
+      ]
+    },
+    {
+      "label": "4dyz",
+      "n": 4,
+      "l": 2,
+      "real_m": -1,
+      "electrons": 2,
+      "z_effective": 60.85,
+      "volume_bohr3": 0.0346328988293096,
+      "volume_angstrom3": 0.005132066120465848,
+      "point_count": 8472,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.02278649910511115,
+        0.02278672584198459,
+        0.02278672584198459,
+        0.02278649910511115,
+        0.21429181466978747,
+        0.21428981423404544,
+        0.21428981423404553,
+        0.21429181466978747
+      ],
+      "border_target_point_counts": [
+        136.3094392637161,
+        136.31045652192327,
+        136.31045652192327,
+        136.3094392637161,
+        732.0182588329259,
+        732.0131337286383,
+        732.0131337286385,
+        732.0182588329259
+      ],
+      "border_point_counts": [
+        136,
+        136,
+        136,
+        136,
+        732,
+        732,
+        732,
+        732
+      ],
+      "connected_lobes": 8,
+      "lobe_point_counts": [
+        188,
+        180,
+        179,
+        177,
+        1938,
+        1930,
+        1945,
+        1935
+      ],
+      "radial_nodes_bohr": [
+        0.19720624486442073
+      ],
+      "radial_peak_densities": [
+        192.15479952345717,
+        36.52254174896936
+      ],
+      "polar_nodes_cos_theta": [
+        0.0
+      ],
+      "polar_peak_densities": [
+        0.29841551829730384,
+        0.29841551829730384
+      ]
+    },
+    {
+      "label": "4dx2-y2",
+      "n": 4,
+      "l": 2,
+      "real_m": 2,
+      "electrons": 2,
+      "z_effective": 60.85,
+      "volume_bohr3": 0.03471636858758462,
+      "volume_angstrom3": 0.0051444350625124815,
+      "point_count": 8488,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.022786764215190436,
+        0.022786764215190415,
+        0.022786764215190426,
+        0.022786764215190436,
+        0.21428561283425707,
+        0.21428561283425707,
+        0.214285612834257,
+        0.21428561283425707
+      ],
+      "border_target_point_counts": [
+        136.91846851055502,
+        136.91846851055493,
+        136.918468510555,
+        136.91846851055502,
+        735.2665333383525,
+        735.2665333383525,
+        735.2665333383524,
+        735.2665333383525
+      ],
+      "border_point_counts": [
+        137,
+        137,
+        137,
+        137,
+        735,
+        735,
+        735,
+        735
+      ],
+      "connected_lobes": 8,
+      "lobe_point_counts": [
+        177,
+        185,
+        181,
+        185,
+        1933,
+        1936,
+        1946,
+        1945
+      ],
+      "radial_nodes_bohr": [
+        0.19720624486442073
+      ],
+      "radial_peak_densities": [
+        192.15479952345717,
+        36.52254174896936
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.29841551829730384
+      ]
+    },
+    {
+      "label": "4dxy",
+      "n": 4,
+      "l": 2,
+      "real_m": -2,
+      "electrons": 2,
+      "z_effective": 60.85,
+      "volume_bohr3": 0.0346328988293096,
+      "volume_angstrom3": 0.005132066120465848,
+      "point_count": 8484,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.022786725841984566,
+        0.02278649910511114,
+        0.022786725841984573,
+        0.02278649910511114,
+        0.2142898142340453,
+        0.21429181466978742,
+        0.21428981423404544,
+        0.21429181466978733
+      ],
+      "border_target_point_counts": [
+        136.64953725953856,
+        136.64851747083836,
+        136.6495372595386,
+        136.64851747083836,
+        733.8340619219856,
+        733.839199775289,
+        733.834061921986,
+        733.8391997752889
+      ],
+      "border_point_counts": [
+        137,
+        137,
+        137,
+        137,
+        734,
+        734,
+        734,
+        734
+      ],
+      "connected_lobes": 8,
+      "lobe_point_counts": [
+        183,
+        185,
+        176,
+        181,
+        1944,
+        1943,
+        1928,
+        1944
+      ],
+      "radial_nodes_bohr": [
+        0.19720624486442073
+      ],
+      "radial_peak_densities": [
+        192.15479952345717,
+        36.52254174896936
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.29841551829730384
+      ]
+    },
+    {
+      "label": "5px",
+      "n": 5,
+      "l": 1,
+      "real_m": 1,
+      "electrons": 2,
+      "z_effective": 42.35,
+      "volume_bohr3": 0.7721651497888614,
+      "volume_angstrom3": 0.11442306993032178,
+      "point_count": 8223,
+      "lobe_support_points": 27,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.013568749819863387,
+        0.013568749819863396,
+        0.1762446986142349,
+        0.1762446986142349,
+        0.8008202360652216,
+        0.8008202360652219,
+        3.301267374394761,
+        3.301267374394764
+      ],
+      "border_target_point_counts": [
+        17.6053636425679,
+        17.60536364256791,
+        120.45564860983276,
+        120.45564860983276,
+        374.8792503791879,
+        374.879250379188,
+        1084.5526718335143,
+        1084.552671833515
+      ],
+      "border_point_counts": [
+        18,
+        18,
+        120,
+        120,
+        375,
+        375,
+        1085,
+        1085
+      ],
+      "connected_lobes": 8,
+      "lobe_point_counts": [
+        34,
+        34,
+        146,
+        151,
+        622,
+        616,
+        3312,
+        3308
+      ],
+      "radial_nodes_bohr": [
+        0.12640001633516668,
+        0.3137849543197631,
+        0.6223888191915872
+      ],
+      "radial_peak_densities": [
+        117.69929398284204,
+        12.946772167037588,
+        4.473660281034065,
+        2.4106183652032445
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.23873241463784306
+      ]
+    },
+    {
+      "label": "5py",
+      "n": 5,
+      "l": 1,
+      "real_m": -1,
+      "electrons": 2,
+      "z_effective": 42.35,
+      "volume_bohr3": 0.7721651497888614,
+      "volume_angstrom3": 0.11442306993032178,
+      "point_count": 8226,
+      "lobe_support_points": 30,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.013568749819863385,
+        0.013568749819863392,
+        0.176244698614235,
+        0.17624469861423492,
+        0.8008202360652218,
+        0.8008202360652216,
+        3.301267374394763,
+        3.3012673743947643
+      ],
+      "border_target_point_counts": [
+        17.605363642567813,
+        17.60536364256782,
+        120.45564860983222,
+        120.45564860983218,
+        374.8792503791861,
+        374.87925037918603,
+        1084.5526718335093,
+        1084.5526718335097
+      ],
+      "border_point_counts": [
+        18,
+        18,
+        120,
+        120,
+        375,
+        375,
+        1085,
+        1085
+      ],
+      "connected_lobes": 8,
+      "lobe_point_counts": [
+        34,
+        34,
+        151,
+        154,
+        620,
+        614,
+        3311,
+        3308
+      ],
+      "radial_nodes_bohr": [
+        0.12640001633516668,
+        0.3137849543197631,
+        0.6223888191915872
+      ],
+      "radial_peak_densities": [
+        117.69929398284204,
+        12.946772167037588,
+        4.473660281034065,
+        2.4106183652032445
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.23873241463784306
+      ]
+    },
+    {
+      "label": "5pz",
+      "n": 5,
+      "l": 1,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 42.35,
+      "volume_bohr3": 0.7721651497888614,
+      "volume_angstrom3": 0.11442306993032178,
+      "point_count": 8240,
+      "lobe_support_points": 30,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.013568749819863387,
+        0.013568749819863389,
+        0.1762446986142348,
+        0.1762446986142348,
+        0.8008202360652221,
+        0.800820236065222,
+        3.3012673743947647,
+        3.301267374394762
+      ],
+      "border_target_point_counts": [
+        17.684560060213194,
+        17.684560060213194,
+        120.99750937730776,
+        120.99750937730776,
+        376.56561677765313,
+        376.5656167776531,
+        1089.431451283953,
+        1089.4314512839524
+      ],
+      "border_point_counts": [
+        18,
+        18,
+        121,
+        121,
+        377,
+        377,
+        1089,
+        1089
+      ],
+      "connected_lobes": 8,
+      "lobe_point_counts": [
+        34,
+        34,
+        151,
+        151,
+        617,
+        622,
+        3322,
+        3309
+      ],
+      "radial_nodes_bohr": [
+        0.12640001633516668,
+        0.3137849543197631,
+        0.6223888191915872
+      ],
+      "radial_peak_densities": [
+        117.69929398284204,
+        12.946772167037588,
+        4.473660281034065,
+        2.4106183652032445
+      ],
+      "polar_nodes_cos_theta": [
+        0.0
+      ],
+      "polar_peak_densities": [
+        0.23873241463784295,
+        0.23873241463784295
+      ]
+    },
+    {
+      "label": "6s",
+      "n": 6,
+      "l": 0,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 12.049999999999997,
+      "volume_bohr3": 551.6780271162161,
+      "volume_angstrom3": 81.75024927374847,
+      "point_count": 7099,
+      "lobe_support_points": 32,
+      "border_support_points": 1,
+      "border_surface_areas_bohr2": [
+        0.00925735006139923,
+        2.334050128827948,
+        16.02011073836242,
+        62.053666446010524,
+        189.2710085794781,
+        603.2012895009472
+      ],
+      "border_target_point_counts": [
+        0.3010931410620268,
+        19.0510309157464,
+        80.78579119793325,
+        223.0547276494981,
+        514.8123059807114,
+        1227.9552587538892
+      ],
+      "border_point_counts": [
+        1,
+        19,
+        81,
+        223,
+        515,
+        1228
+      ],
+      "connected_lobes": 6,
+      "lobe_point_counts": [
+        17,
+        35,
+        104,
+        357,
+        1128,
+        5458
+      ],
+      "radial_nodes_bohr": [
+        0.15361763982031634,
+        0.5260496162436161,
+        1.147925265813494,
+        2.0910540177273473,
+        3.5502331284450204
+      ],
+      "radial_peak_densities": [
+        32.40166898148146,
+        0.5671284184229821,
+        0.1350572002118841,
+        0.05244738644356086,
+        0.026376946403251653,
+        0.01767767270806312
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.07957747154594766
+      ]
+    },
+    {
+      "label": "4fz3",
+      "n": 4,
+      "l": 3,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 49.45,
+      "volume_bohr3": 0.07274238641596197,
+      "volume_angstrom3": 0.010779309542845898,
+      "point_count": 7554,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.11401701442959812,
+        0.8547573281604174,
+        0.8547573281604169,
+        0.11401701442959813
+      ],
+      "border_target_point_counts": [
+        230.81591924104424,
+        1045.7325701982074,
+        1045.732570198207,
+        230.81591924104427
+      ],
+      "border_point_counts": [
+        231,
+        1046,
+        1046,
+        231
+      ],
+      "connected_lobes": 4,
+      "lobe_point_counts": [
+        473,
+        3296,
+        3302,
+        483
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        43.35398153018873
+      ],
+      "polar_nodes_cos_theta": [
+        -0.7745966692414834,
+        0.0,
+        0.7745966692414834
+      ],
+      "polar_peak_densities": [
+        0.5570423008216335,
+        0.11140846016432673,
+        0.11140846016432673,
+        0.5570423008216335
+      ]
+    },
+    {
+      "label": "4fxz2",
+      "n": 4,
+      "l": 3,
+      "real_m": 1,
+      "electrons": 2,
+      "z_effective": 49.45,
+      "volume_bohr3": 0.028082932201817033,
+      "volume_angstrom3": 0.004161461205618566,
+      "point_count": 8058,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.12313942040811564,
+        0.12314765270626991,
+        0.199229122584981,
+        0.19922912258498104,
+        0.12314765270626989,
+        0.1231394204081156
+      ],
+      "border_target_point_counts": [
+        445.12337449289305,
+        445.145692839655,
+        638.5533514129504,
+        638.5533514129505,
+        445.14569283965494,
+        445.12337449289294
+      ],
+      "border_point_counts": [
+        445,
+        445,
+        639,
+        639,
+        445,
+        445
+      ],
+      "connected_lobes": 6,
+      "lobe_point_counts": [
+        1128,
+        1121,
+        1780,
+        1772,
+        1132,
+        1125
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        43.35398153018873
+      ],
+      "polar_nodes_cos_theta": [
+        -0.447213595499958,
+        0.447213595499958
+      ],
+      "polar_peak_densities": [
+        0.396118969473162,
+        0.20889086280811267,
+        0.3961189694731621
+      ]
+    },
+    {
+      "label": "4fyz2",
+      "n": 4,
+      "l": 3,
+      "real_m": -1,
+      "electrons": 2,
+      "z_effective": 49.45,
+      "volume_bohr3": 0.028082932201817033,
+      "volume_angstrom3": 0.004161461205618566,
+      "point_count": 8084,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.12313942040811564,
+        0.12314765270626997,
+        0.19922912258498116,
+        0.19922912258498096,
+        0.12314765270626998,
+        0.12313942040811557
+      ],
+      "border_target_point_counts": [
+        448.6592177148167,
+        448.6817133476519,
+        643.6257081320342,
+        643.6257081320338,
+        448.681713347652,
+        448.6592177148166
+      ],
+      "border_point_counts": [
+        449,
+        449,
+        644,
+        644,
+        449,
+        449
+      ],
+      "connected_lobes": 6,
+      "lobe_point_counts": [
+        1120,
+        1134,
+        1786,
+        1786,
+        1129,
+        1129
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        43.35398153018873
+      ],
+      "polar_nodes_cos_theta": [
+        -0.447213595499958,
+        0.447213595499958
+      ],
+      "polar_peak_densities": [
+        0.396118969473162,
+        0.20889086280811267,
+        0.3961189694731621
+      ]
+    },
+    {
+      "label": "4fzx2-y2",
+      "n": 4,
+      "l": 3,
+      "real_m": 2,
+      "electrons": 2,
+      "z_effective": 49.45,
+      "volume_bohr3": 0.028346021770088874,
+      "volume_angstrom3": 0.004200447057384264,
+      "point_count": 8720,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.11454992740764779,
+        0.11454992740764783,
+        0.11455386759968926,
+        0.11455386759968925,
+        0.1145538675996892,
+        0.11455386759968919,
+        0.11454992740764769,
+        0.11454992740764774
+      ],
+      "border_target_point_counts": [
+        464.56656461401525,
+        464.56656461401536,
+        464.57854938990124,
+        464.5785493899012,
+        464.57854938990107,
+        464.578549389901,
+        464.56656461401496,
+        464.56656461401514
+      ],
+      "border_point_counts": [
+        465,
+        465,
+        465,
+        465,
+        465,
+        465,
+        465,
+        465
+      ],
+      "connected_lobes": 8,
+      "lobe_point_counts": [
+        1097,
+        1094,
+        1090,
+        1080,
+        1087,
+        1094,
+        1094,
+        1084
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        43.35398153018873
+      ],
+      "polar_nodes_cos_theta": [
+        0.0
+      ],
+      "polar_peak_densities": [
+        0.3094679449009075,
+        0.3094679449009076
+      ]
+    },
+    {
+      "label": "4fxyz",
+      "n": 4,
+      "l": 3,
+      "real_m": -2,
+      "electrons": 2,
+      "z_effective": 49.45,
+      "volume_bohr3": 0.028212597774751012,
+      "volume_angstrom3": 0.004180675661131661,
+      "point_count": 8696,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.11454976683651158,
+        0.11454976683651155,
+        0.11455548826847184,
+        0.11454976683651158,
+        0.11455548826847177,
+        0.11454976683651151,
+        0.11454976683651147,
+        0.11454976683651154
+      ],
+      "border_target_point_counts": [
+        461.9010761000657,
+        461.9010761000656,
+        461.9183789664506,
+        461.9010761000657,
+        461.91837896645035,
+        461.9010761000655,
+        461.9010761000653,
+        461.90107610006555
+      ],
+      "border_point_counts": [
+        462,
+        462,
+        462,
+        462,
+        462,
+        462,
+        462,
+        462
+      ],
+      "connected_lobes": 8,
+      "lobe_point_counts": [
+        1093,
+        1082,
+        1073,
+        1093,
+        1089,
+        1088,
+        1082,
+        1096
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        43.35398153018873
+      ],
+      "polar_nodes_cos_theta": [
+        0.0
+      ],
+      "polar_peak_densities": [
+        0.3094679449009075,
+        0.3094679449009076
+      ]
+    },
+    {
+      "label": "4fxx2-3y2",
+      "n": 4,
+      "l": 3,
+      "real_m": 3,
+      "electrons": 2,
+      "z_effective": 49.45,
+      "volume_bohr3": 0.024705989671927765,
+      "volume_angstrom3": 0.0036610499511688494,
+      "point_count": 8180,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.13184348421951975,
+        0.1318493107755453,
+        0.13184001215665564,
+        0.13184348421951977,
+        0.13184931077554535,
+        0.13184001215665567
+      ],
+      "border_target_point_counts": [
+        529.9814618868062,
+        529.9990278835662,
+        529.9709941624006,
+        529.9814618868063,
+        529.9990278835664,
+        529.9709941624008
+      ],
+      "border_point_counts": [
+        530,
+        530,
+        530,
+        530,
+        530,
+        530
+      ],
+      "connected_lobes": 6,
+      "lobe_point_counts": [
+        1360,
+        1359,
+        1370,
+        1365,
+        1361,
+        1365
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        43.35398153018873
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.34815143801352105
+      ]
+    },
+    {
+      "label": "4fy3x2-y2",
+      "n": 4,
+      "l": 3,
+      "real_m": -3,
+      "electrons": 2,
+      "z_effective": 49.45,
+      "volume_bohr3": 0.024705989671927765,
+      "volume_angstrom3": 0.0036610499511688494,
+      "point_count": 8162,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.1318493107755453,
+        0.13184348421951972,
+        0.13184001215665558,
+        0.13184931077554532,
+        0.13184348421951975,
+        0.1318400121566557
+      ],
+      "border_target_point_counts": [
+        526.8101047314568,
+        526.7926444266145,
+        526.782239684907,
+        526.8101047314569,
+        526.7926444266146,
+        526.7822396849073
+      ],
+      "border_point_counts": [
+        527,
+        527,
+        527,
+        527,
+        527,
+        527
+      ],
+      "connected_lobes": 6,
+      "lobe_point_counts": [
+        1371,
+        1363,
+        1364,
+        1353,
+        1360,
+        1351
+      ],
+      "radial_nodes_bohr": [],
+      "radial_peak_densities": [
+        43.35398153018873
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.34815143801352105
+      ]
+    },
+    {
+      "label": "5dz2",
+      "n": 5,
+      "l": 2,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 28.849999999999994,
+      "volume_bohr3": 3.355356319389183,
+      "volume_angstrom3": 0.4972125080749842,
+      "point_count": 8676,
+      "lobe_support_points": 28,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.08302353568793401,
+        0.492601432630553,
+        0.08302353568793398,
+        0.5455615789635597,
+        3.2858067371459816,
+        0.5455615789635594,
+        2.5851812721843808,
+        15.704203020454573,
+        2.5851812721843794
+      ],
+      "border_target_point_counts": [
+        34.03081755191548,
+        129.3728713539197,
+        34.03081755191547,
+        139.67037445158178,
+        536.9736515181435,
+        139.6703744515817,
+        448.5798021703996,
+        1735.7348770346896,
+        448.5798021703995
+      ],
+      "border_point_counts": [
+        34,
+        129,
+        34,
+        140,
+        537,
+        140,
+        449,
+        1736,
+        449
+      ],
+      "connected_lobes": 9,
+      "lobe_point_counts": [
+        50,
+        152,
+        50,
+        191,
+        876,
+        183,
+        944,
+        5285,
+        945
+      ],
+      "radial_nodes_bohr": [
+        0.3773179106529818,
+        0.8358536664700686
+      ],
+      "radial_peak_densities": [
+        10.743083563007058,
+        1.8740459424744538,
+        0.8654752381666251
+      ],
+      "polar_nodes_cos_theta": [
+        -0.5773502691896257,
+        0.5773502691896257
+      ],
+      "polar_peak_densities": [
+        0.3978873577297383,
+        0.09947183943243458,
+        0.3978873577297383
+      ]
+    },
+    {
+      "label": "5dxz",
+      "n": 5,
+      "l": 2,
+      "real_m": 1,
+      "electrons": 2,
+      "z_effective": 28.849999999999994,
+      "volume_bohr3": 1.5514609914774211,
+      "volume_angstrom3": 0.22990279938239724,
+      "point_count": 8567,
+      "lobe_support_points": 35,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.08828888214083921,
+        0.08828940275382542,
+        0.08828940275382538,
+        0.08828888214083927,
+        0.5818420820588671,
+        0.5818109055176294,
+        0.5818109055176299,
+        0.5818420820588674,
+        2.7567436425608287,
+        2.7567315745395873,
+        2.7567315745395877,
+        2.7567436425608296
+      ],
+      "border_target_point_counts": [
+        48.19483160564948,
+        48.195044748313364,
+        48.19504474831336,
+        48.194831605649505,
+        198.23247352544874,
+        198.22450713155402,
+        198.22450713155416,
+        198.23247352544882,
+        636.6023535314155,
+        636.6002634200581,
+        636.6002634200582,
+        636.6023535314156
+      ],
+      "border_point_counts": [
+        48,
+        48,
+        48,
+        48,
+        198,
+        198,
+        198,
+        198,
+        637,
+        637,
+        637,
+        637
+      ],
+      "connected_lobes": 12,
+      "lobe_point_counts": [
+        64,
+        64,
+        64,
+        64,
+        303,
+        312,
+        313,
+        301,
+        1785,
+        1771,
+        1754,
+        1772
+      ],
+      "radial_nodes_bohr": [
+        0.3773179106529818,
+        0.8358536664700686
+      ],
+      "radial_peak_densities": [
+        10.743083563007058,
+        1.8740459424744538,
+        0.8654752381666251
+      ],
+      "polar_nodes_cos_theta": [
+        0.0
+      ],
+      "polar_peak_densities": [
+        0.29841551829730384,
+        0.29841551829730384
+      ]
+    },
+    {
+      "label": "5dyz",
+      "n": 5,
+      "l": 2,
+      "real_m": -1,
+      "electrons": 2,
+      "z_effective": 28.849999999999994,
+      "volume_bohr3": 1.5514609914774211,
+      "volume_angstrom3": 0.22990279938239724,
+      "point_count": 8574,
+      "lobe_support_points": 34,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.08828888214083919,
+        0.0882894027538254,
+        0.08828940275382542,
+        0.08828888214083923,
+        0.5818420820588671,
+        0.58181090551763,
+        0.5818109055176298,
+        0.5818420820588673,
+        2.7567436425608296,
+        2.756731574539586,
+        2.756731574539587,
+        2.75674364256083
+      ],
+      "border_target_point_counts": [
+        48.279756419053534,
+        48.27996993729921,
+        48.279969937299214,
+        48.27975641905355,
+        198.58178184884994,
+        198.5738014172569,
+        198.57380141725687,
+        198.58178184885003,
+        637.7241197931718,
+        637.7220259987985,
+        637.7220259987987,
+        637.7241197931719
+      ],
+      "border_point_counts": [
+        48,
+        48,
+        48,
+        48,
+        199,
+        199,
+        199,
+        199,
+        638,
+        638,
+        638,
+        638
+      ],
+      "connected_lobes": 12,
+      "lobe_point_counts": [
+        64,
+        64,
+        64,
+        64,
+        310,
+        304,
+        305,
+        304,
+        1764,
+        1776,
+        1780,
+        1775
+      ],
+      "radial_nodes_bohr": [
+        0.3773179106529818,
+        0.8358536664700686
+      ],
+      "radial_peak_densities": [
+        10.743083563007058,
+        1.8740459424744538,
+        0.8654752381666251
+      ],
+      "polar_nodes_cos_theta": [
+        0.0
+      ],
+      "polar_peak_densities": [
+        0.29841551829730384,
+        0.29841551829730384
+      ]
+    },
+    {
+      "label": "5dx2-y2",
+      "n": 5,
+      "l": 2,
+      "real_m": 2,
+      "electrons": 2,
+      "z_effective": 28.849999999999994,
+      "volume_bohr3": 1.5483290623944983,
+      "volume_angstrom3": 0.22943869537489306,
+      "point_count": 8614,
+      "lobe_support_points": 34,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.0882897049265641,
+        0.08828970492656417,
+        0.08828970492656418,
+        0.08828970492656414,
+        0.5817969394868503,
+        0.5817969394868504,
+        0.5817969394868506,
+        0.5817969394868507,
+        2.7565730492932374,
+        2.756573049293238,
+        2.756573049293238,
+        2.7565730492932383
+      ],
+      "border_target_point_counts": [
+        48.81800297187145,
+        48.81800297187147,
+        48.818002971871486,
+        48.818002971871465,
+        200.78258195314888,
+        200.7825819531489,
+        200.782581953149,
+        200.78258195314902,
+        644.7993482345469,
+        644.7993482345469,
+        644.7993482345469,
+        644.799348234547
+      ],
+      "border_point_counts": [
+        49,
+        49,
+        49,
+        49,
+        201,
+        201,
+        201,
+        201,
+        645,
+        645,
+        645,
+        645
+      ],
+      "connected_lobes": 12,
+      "lobe_point_counts": [
+        65,
+        65,
+        65,
+        65,
+        311,
+        307,
+        315,
+        306,
+        1786,
+        1777,
+        1780,
+        1772
+      ],
+      "radial_nodes_bohr": [
+        0.3773179106529818,
+        0.8358536664700686
+      ],
+      "radial_peak_densities": [
+        10.743083563007058,
+        1.8740459424744538,
+        0.8654752381666251
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.29841551829730384
+      ]
+    },
+    {
+      "label": "5dxy",
+      "n": 5,
+      "l": 2,
+      "real_m": -2,
+      "electrons": 2,
+      "z_effective": 28.849999999999994,
+      "volume_bohr3": 1.5514609914774211,
+      "volume_angstrom3": 0.22990279938239724,
+      "point_count": 8558,
+      "lobe_support_points": 34,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.08828940275382541,
+        0.08828888214083923,
+        0.08828940275382542,
+        0.08828888214083924,
+        0.5818109055176294,
+        0.5818420820588672,
+        0.5818109055176295,
+        0.5818420820588668,
+        2.7567315745395873,
+        2.7567436425608296,
+        2.756731574539587,
+        2.7567436425608305
+      ],
+      "border_target_point_counts": [
+        48.06765696483766,
+        48.067444385546466,
+        48.067656964837674,
+        48.06744438554647,
+        197.70056570301253,
+        197.70851104035953,
+        197.70056570301253,
+        197.7085110403594,
+        634.9176195519876,
+        634.9197041388218,
+        634.9176195519876,
+        634.9197041388219
+      ],
+      "border_point_counts": [
+        48,
+        48,
+        48,
+        48,
+        198,
+        198,
+        198,
+        198,
+        635,
+        635,
+        635,
+        635
+      ],
+      "connected_lobes": 12,
+      "lobe_point_counts": [
+        64,
+        64,
+        64,
+        64,
+        310,
+        307,
+        304,
+        304,
+        1763,
+        1773,
+        1774,
+        1767
+      ],
+      "radial_nodes_bohr": [
+        0.3773179106529818,
+        0.8358536664700686
+      ],
+      "radial_peak_densities": [
+        10.743083563007058,
+        1.8740459424744538,
+        0.8654752381666251
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.29841551829730384
+      ]
+    },
+    {
+      "label": "6px",
+      "n": 6,
+      "l": 1,
+      "real_m": 1,
+      "electrons": 2,
+      "z_effective": 12.049999999999997,
+      "volume_bohr3": 104.35073504790883,
+      "volume_angstrom3": 15.463183564982474,
+      "point_count": 8250,
+      "lobe_support_points": 46,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.1641648810691432,
+        0.16416488106914334,
+        2.058738906653285,
+        2.0587389066532857,
+        8.713555033656077,
+        8.713555033656078,
+        27.53646061636092,
+        27.536460616360902,
+        90.36053114016917,
+        90.3605311401692
+      ],
+      "border_target_point_counts": [
+        8.53327066537962,
+        8.533270665379623,
+        56.86647166861684,
+        56.86647166861686,
+        167.8038275592764,
+        167.80382755927644,
+        397.728229703614,
+        397.72822970361375,
+        969.7044981336084,
+        969.7044981336086
+      ],
+      "border_point_counts": [
+        9,
+        9,
+        57,
+        57,
+        168,
+        168,
+        398,
+        398,
+        970,
+        970
+      ],
+      "connected_lobes": 10,
+      "lobe_point_counts": [
+        25,
+        25,
+        73,
+        73,
+        231,
+        225,
+        699,
+        708,
+        3094,
+        3097
+      ],
+      "radial_nodes_bohr": [
+        0.4370593312495001,
+        1.0619765640639396,
+        2.0061263111546896,
+        3.465792150378345
+      ],
+      "radial_peak_densities": [
+        1.5755285765052736,
+        0.1728877306413842,
+        0.05888101060865354,
+        0.02812903686971427,
+        0.01833321645927676
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.23873241463784306
+      ]
+    },
+    {
+      "label": "6py",
+      "n": 6,
+      "l": 1,
+      "real_m": -1,
+      "electrons": 2,
+      "z_effective": 12.049999999999997,
+      "volume_bohr3": 104.35073504790883,
+      "volume_angstrom3": 15.463183564982474,
+      "point_count": 8263,
+      "lobe_support_points": 45,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.16416488106914331,
+        0.16416488106914331,
+        2.058738906653286,
+        2.0587389066532844,
+        8.71355503365608,
+        8.713555033656082,
+        27.5364606163609,
+        27.536460616360916,
+        90.36053114016924,
+        90.36053114016919
+      ],
+      "border_target_point_counts": [
+        8.573389474337803,
+        8.573389474337803,
+        57.13382696560222,
+        57.13382696560218,
+        168.5927501147996,
+        168.59275011479963,
+        399.59813205295455,
+        399.5981320529547,
+        974.2635225724264,
+        974.2635225724258
+      ],
+      "border_point_counts": [
+        9,
+        9,
+        57,
+        57,
+        169,
+        169,
+        400,
+        400,
+        974,
+        974
+      ],
+      "connected_lobes": 10,
+      "lobe_point_counts": [
+        25,
+        25,
+        73,
+        73,
+        228,
+        234,
+        705,
+        702,
+        3111,
+        3087
+      ],
+      "radial_nodes_bohr": [
+        0.4370593312495001,
+        1.0619765640639396,
+        2.0061263111546896,
+        3.465792150378345
+      ],
+      "radial_peak_densities": [
+        1.5755285765052736,
+        0.1728877306413842,
+        0.05888101060865354,
+        0.02812903686971427,
+        0.01833321645927676
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.23873241463784306
+      ]
+    },
+    {
+      "label": "6pz",
+      "n": 6,
+      "l": 1,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 12.049999999999997,
+      "volume_bohr3": 104.35073504790883,
+      "volume_angstrom3": 15.463183564982474,
+      "point_count": 8247,
+      "lobe_support_points": 45,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.16416488106914331,
+        0.1641648810691432,
+        2.0587389066532853,
+        2.058738906653285,
+        8.713555033656089,
+        8.713555033656078,
+        27.5364606163609,
+        27.5364606163609,
+        90.3605311401692,
+        90.36053114016916
+      ],
+      "border_target_point_counts": [
+        8.529258784483936,
+        8.529258784483932,
+        56.839736138919186,
+        56.83973613891917,
+        167.72493530372685,
+        167.7249353037267,
+        397.5412394686857,
+        397.5412394686857,
+        969.2485956897417,
+        969.2485956897414
+      ],
+      "border_point_counts": [
+        9,
+        9,
+        57,
+        57,
+        168,
+        168,
+        398,
+        398,
+        969,
+        969
+      ],
+      "connected_lobes": 10,
+      "lobe_point_counts": [
+        25,
+        25,
+        73,
+        73,
+        225,
+        235,
+        705,
+        705,
+        3095,
+        3086
+      ],
+      "radial_nodes_bohr": [
+        0.4370593312495001,
+        1.0619765640639396,
+        2.0061263111546896,
+        3.465792150378345
+      ],
+      "radial_peak_densities": [
+        1.5755285765052736,
+        0.1728877306413842,
+        0.05888101060865354,
+        0.02812903686971427,
+        0.01833321645927676
+      ],
+      "polar_nodes_cos_theta": [
+        0.0
+      ],
+      "polar_peak_densities": [
+        0.23873241463784295,
+        0.23873241463784295
+      ]
+    },
+    {
+      "label": "7s",
+      "n": 7,
+      "l": 0,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 2.8500000000000085,
+      "volume_bohr3": 105399.56233010111,
+      "volume_angstrom3": 15618.60373317827,
+      "point_count": 7139,
+      "lobe_support_points": 42,
+      "border_support_points": 1,
+      "border_surface_areas_bohr2": [
+        0.1653565018086218,
+        41.29058365746604,
+        278.6381023727526,
+        1046.2626936258357,
+        2997.284104986637,
+        7579.3038336263535,
+        20883.746979324744
+      ],
+      "border_target_point_counts": [
+        0.168606869881221,
+        10.591258679537424,
+        44.34449227337591,
+        119.61616212126081,
+        263.3936143820487,
+        528.1792028316536,
+        1129.5764412709038
+      ],
+      "border_point_counts": [
+        1,
+        11,
+        44,
+        120,
+        263,
+        528,
+        1130
+      ],
+      "connected_lobes": 7,
+      "lobe_point_counts": [
+        17,
+        27,
+        60,
+        170,
+        440,
+        1229,
+        5196
+      ],
+      "radial_nodes_bohr": [
+        0.6480134828031388,
+        2.2059822223690917,
+        4.760787832164614,
+        8.49679227490051,
+        13.796890000628347,
+        21.670481555555195
+      ],
+      "radial_peak_densities": [
+        0.2699606413994194,
+        0.00472447948452795,
+        0.0011239039943453807,
+        0.00043441400533989415,
+        0.00021419545799587547,
+        0.00012492727684143066,
+        9.375081633890715e-05
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.07957747154594766
+      ]
+    },
+    {
+      "label": "5fz3",
+      "n": 5,
+      "l": 3,
+      "real_m": 0,
+      "electrons": 2,
+      "z_effective": 18.150000000000006,
+      "volume_bohr3": 11.169952105591872,
+      "volume_angstrom3": 1.6552161299250086,
+      "point_count": 8648,
+      "lobe_support_points": 6,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.4960719889929671,
+        3.667839529485809,
+        3.667839529485807,
+        0.49607198899296706,
+        3.180077404298263,
+        24.139310978794274,
+        24.139310978794303,
+        3.180077404298262
+      ],
+      "border_target_point_counts": [
+        65.17107914153273,
+        292.216092196007,
+        292.2160921960069,
+        65.17107914153272,
+        262.5576350290839,
+        1200.7152756618968,
+        1200.715275661898,
+        262.55763502908377
+      ],
+      "border_point_counts": [
+        65,
+        292,
+        292,
+        65,
+        263,
+        1201,
+        1201,
+        263
+      ],
+      "connected_lobes": 8,
+      "lobe_point_counts": [
+        81,
+        431,
+        404,
+        81,
+        493,
+        3333,
+        3334,
+        491
+      ],
+      "radial_nodes_bohr": [
+        1.101928374655647
+      ],
+      "radial_peak_densities": [
+        1.1391773507126948,
+        0.2785883908057674
+      ],
+      "polar_nodes_cos_theta": [
+        -0.7745966692414834,
+        0.0,
+        0.7745966692414834
+      ],
+      "polar_peak_densities": [
+        0.5570423008216335,
+        0.11140846016432673,
+        0.11140846016432673,
+        0.5570423008216335
+      ]
+    },
+    {
+      "label": "5fxz2",
+      "n": 5,
+      "l": 3,
+      "real_m": 1,
+      "electrons": 2,
+      "z_effective": 18.150000000000006,
+      "volume_bohr3": 4.392069875787691,
+      "volume_angstrom3": 0.6508376073091767,
+      "point_count": 9246,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.5361272481298562,
+        0.5361494561193278,
+        0.8693041526904616,
+        0.8693041526904617,
+        0.5361494561193277,
+        0.5361272481298563,
+        3.4442615256272178,
+        3.4442673920893454,
+        5.639449126626048,
+        5.639449126626049,
+        3.444267392089343,
+        3.444261525627217
+      ],
+      "border_target_point_counts": [
+        122.33736801013404,
+        122.34116867442067,
+        175.78711483368565,
+        175.78711483368568,
+        122.34116867442064,
+        122.33736801013406,
+        493.6626983943219,
+        493.66332901997686,
+        714.5551191871336,
+        714.5551191871338,
+        493.66332901997663,
+        493.6626983943218
+      ],
+      "border_point_counts": [
+        122,
+        122,
+        176,
+        176,
+        122,
+        122,
+        494,
+        494,
+        715,
+        715,
+        494,
+        494
+      ],
+      "connected_lobes": 12,
+      "lobe_point_counts": [
+        165,
+        164,
+        241,
+        246,
+        157,
+        164,
+        1138,
+        1136,
+        1775,
+        1797,
+        1127,
+        1136
+      ],
+      "radial_nodes_bohr": [
+        1.101928374655647
+      ],
+      "radial_peak_densities": [
+        1.1391773507126948,
+        0.2785883908057674
+      ],
+      "polar_nodes_cos_theta": [
+        -0.447213595499958,
+        0.447213595499958
+      ],
+      "polar_peak_densities": [
+        0.396118969473162,
+        0.20889086280811267,
+        0.3961189694731621
+      ]
+    },
+    {
+      "label": "5fyz2",
+      "n": 5,
+      "l": 3,
+      "real_m": -1,
+      "electrons": 2,
+      "z_effective": 18.150000000000006,
+      "volume_bohr3": 4.392069875787691,
+      "volume_angstrom3": 0.6508376073091767,
+      "point_count": 9204,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.5361272481298565,
+        0.536149456119328,
+        0.8693041526904614,
+        0.8693041526904617,
+        0.5361494561193277,
+        0.5361272481298563,
+        3.4442615256272173,
+        3.4442673920893436,
+        5.639449126626046,
+        5.639449126626049,
+        3.4442673920893445,
+        3.4442615256272155
+      ],
+      "border_target_point_counts": [
+        121.20670841669786,
+        121.21047395469716,
+        174.16246497385933,
+        174.1624649738594,
+        121.21047395469712,
+        121.20670841669784,
+        489.1001965607455,
+        489.10082135806704,
+        707.9510977528896,
+        707.95109775289,
+        489.10082135806715,
+        489.10019656074525
+      ],
+      "border_point_counts": [
+        121,
+        121,
+        174,
+        174,
+        121,
+        121,
+        489,
+        489,
+        708,
+        708,
+        489,
+        489
+      ],
+      "connected_lobes": 12,
+      "lobe_point_counts": [
+        159,
+        165,
+        240,
+        245,
+        159,
+        163,
+        1122,
+        1133,
+        1780,
+        1780,
+        1128,
+        1130
+      ],
+      "radial_nodes_bohr": [
+        1.101928374655647
+      ],
+      "radial_peak_densities": [
+        1.1391773507126948,
+        0.2785883908057674
+      ],
+      "polar_nodes_cos_theta": [
+        -0.447213595499958,
+        0.447213595499958
+      ],
+      "polar_peak_densities": [
+        0.396118969473162,
+        0.20889086280811267,
+        0.3961189694731621
+      ]
+    },
+    {
+      "label": "5fzx2-y2",
+      "n": 5,
+      "l": 3,
+      "real_m": 2,
+      "electrons": 2,
+      "z_effective": 18.150000000000006,
+      "volume_bohr3": 4.434293104300394,
+      "volume_angstrom3": 0.657094444243755,
+      "point_count": 9016,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.49846263424075943,
+        0.4984626342407592,
+        0.498466584778066,
+        0.4984665847780659,
+        0.4984665847780652,
+        0.49846658477806527,
+        0.4984626342407592,
+        0.4984626342407589,
+        3.1958352185158128,
+        3.195835218515814,
+        3.1957351116499533,
+        3.19573511164995,
+        3.195735111649948,
+        3.1957351116499497,
+        3.1958352185158123,
+        3.1958352185158114
+      ],
+      "border_target_point_counts": [
+        99.68298541441936,
+        99.68298541441932,
+        99.68357793771328,
+        99.68357793771325,
+        99.68357793771315,
+        99.68357793771317,
+        99.68298541441932,
+        99.68298541441926,
+        401.63806292749456,
+        401.6380629274947,
+        401.62862715819494,
+        401.62862715819466,
+        401.62862715819443,
+        401.62862715819466,
+        401.6380629274945,
+        401.6380629274944
+      ],
+      "border_point_counts": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        402,
+        402,
+        402,
+        402,
+        402,
+        402,
+        402,
+        402
+      ],
+      "connected_lobes": 16,
+      "lobe_point_counts": [
+        139,
+        135,
+        139,
+        136,
+        138,
+        134,
+        138,
+        133,
+        985,
+        992,
+        981,
+        996,
+        997,
+        995,
+        993,
+        985
+      ],
+      "radial_nodes_bohr": [
+        1.101928374655647
+      ],
+      "radial_peak_densities": [
+        1.1391773507126948,
+        0.2785883908057674
+      ],
+      "polar_nodes_cos_theta": [
+        0.0
+      ],
+      "polar_peak_densities": [
+        0.3094679449009075,
+        0.3094679449009076
+      ]
+    },
+    {
+      "label": "5fxyz",
+      "n": 5,
+      "l": 3,
+      "real_m": -2,
+      "electrons": 2,
+      "z_effective": 18.150000000000006,
+      "volume_bohr3": 4.431634174334408,
+      "volume_angstrom3": 0.6567004314739205,
+      "point_count": 9024,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.49846074753560826,
+        0.49846074753560804,
+        0.49846676960414915,
+        0.498460747535608,
+        0.4984667696041484,
+        0.4984607475356079,
+        0.49846074753560776,
+        0.49846074753560776,
+        3.1958403993663707,
+        3.1958403993663698,
+        3.195727202666799,
+        3.1958403993663698,
+        3.1957272026667978,
+        3.195840399366368,
+        3.1958403993663675,
+        3.1958403993663684
+      ],
+      "border_target_point_counts": [
+        99.95960890178576,
+        99.95960890178571,
+        99.9605146341479,
+        99.95960890178571,
+        99.96051463414778,
+        99.9596089017857,
+        99.95960890178569,
+        99.95960890178569,
+        402.7542544749972,
+        402.7542544749971,
+        402.743555257772,
+        402.7542544749971,
+        402.7435552577719,
+        402.7542544749969,
+        402.75425447499686,
+        402.75425447499697
+      ],
+      "border_point_counts": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        403,
+        403,
+        403,
+        403,
+        403,
+        403,
+        403,
+        403
+      ],
+      "connected_lobes": 16,
+      "lobe_point_counts": [
+        135,
+        139,
+        136,
+        133,
+        136,
+        136,
+        132,
+        134,
+        991,
+        987,
+        991,
+        994,
+        992,
+        990,
+        1001,
+        997
+      ],
+      "radial_nodes_bohr": [
+        1.101928374655647
+      ],
+      "radial_peak_densities": [
+        1.1391773507126948,
+        0.2785883908057674
+      ],
+      "polar_nodes_cos_theta": [
+        0.0
+      ],
+      "polar_peak_densities": [
+        0.3094679449009075,
+        0.3094679449009076
+      ]
+    },
+    {
+      "label": "5fxx2-3y2",
+      "n": 5,
+      "l": 3,
+      "real_m": 3,
+      "electrons": 1,
+      "z_effective": 18.150000000000006,
+      "volume_bohr3": 3.8703616179345635,
+      "volume_angstrom3": 0.5735284196465664,
+      "point_count": 8966,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.5743252003490554,
+        0.5743401375561785,
+        0.574312754926523,
+        0.5743252003490553,
+        0.5743401375561784,
+        0.5743127549265232,
+        3.696041196594131,
+        3.6960807312762114,
+        3.696036543756161,
+        3.6960411965941327,
+        3.69608073127621,
+        3.6960365437561586
+      ],
+      "border_target_point_counts": [
+        131.05469202052282,
+        131.0572483919573,
+        131.05256208337994,
+        131.0546920205228,
+        131.05724839195727,
+        131.05256208338,
+        529.5253696568021,
+        529.5296176997834,
+        529.5248697037437,
+        529.5253696568022,
+        529.5296176997833,
+        529.5248697037434
+      ],
+      "border_point_counts": [
+        131,
+        131,
+        131,
+        131,
+        131,
+        131,
+        530,
+        530,
+        530,
+        530,
+        530,
+        530
+      ],
+      "connected_lobes": 12,
+      "lobe_point_counts": [
+        179,
+        183,
+        186,
+        179,
+        183,
+        177,
+        1308,
+        1311,
+        1316,
+        1321,
+        1308,
+        1315
+      ],
+      "radial_nodes_bohr": [
+        1.101928374655647
+      ],
+      "radial_peak_densities": [
+        1.1391773507126948,
+        0.2785883908057674
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.34815143801352105
+      ]
+    },
+    {
+      "label": "5fy3x2-y2",
+      "n": 5,
+      "l": 3,
+      "real_m": -3,
+      "electrons": 1,
+      "z_effective": 18.150000000000006,
+      "volume_bohr3": 3.8703616179345635,
+      "volume_angstrom3": 0.5735284196465664,
+      "point_count": 8984,
+      "lobe_support_points": 0,
+      "border_support_points": 0,
+      "border_surface_areas_bohr2": [
+        0.5743401375561783,
+        0.5743252003490557,
+        0.574312754926523,
+        0.5743401375561781,
+        0.5743252003490559,
+        0.5743127549265231,
+        3.696080731276211,
+        3.696041196594131,
+        3.69603654375616,
+        3.696080731276211,
+        3.6960411965941313,
+        3.6960365437561595
+      ],
+      "border_target_point_counts": [
+        131.56066932047858,
+        131.5581031294356,
+        131.55596501071597,
+        131.56066932047855,
+        131.55810312943564,
+        131.55596501071597,
+        531.5636623260273,
+        531.5593979653393,
+        531.5588960918463,
+        531.5636623260273,
+        531.5593979653393,
+        531.5588960918463
+      ],
+      "border_point_counts": [
+        132,
+        132,
+        132,
+        132,
+        132,
+        132,
+        532,
+        532,
+        532,
+        532,
+        532,
+        532
+      ],
+      "connected_lobes": 12,
+      "lobe_point_counts": [
+        184,
+        180,
+        181,
+        182,
+        180,
+        178,
+        1316,
+        1314,
+        1324,
+        1314,
+        1316,
+        1315
+      ],
+      "radial_nodes_bohr": [
+        1.101928374655647
+      ],
+      "radial_peak_densities": [
+        1.1391773507126948,
+        0.2785883908057674
+      ],
+      "polar_nodes_cos_theta": [],
+      "polar_peak_densities": [
+        0.34815143801352105
+      ]
+    }
+  ]
+}

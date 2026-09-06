@@ -1,0 +1,7 @@
+.venv/
+.deps/
+*_test.glb
+*_test.gltf
+*_test.bin
+*_test.json
+__pycache__/
