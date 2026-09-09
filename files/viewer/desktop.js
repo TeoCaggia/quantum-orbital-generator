@@ -381,39 +381,48 @@ class DesktopViewer extends Viewer {
     row.dataset.panel = 'orbitals';
     row.setAttribute('role', 'group');
     row.setAttribute('aria-label', 'Electron configuration');
+    // Two-state segmented toggles rather than four separate show/hide
+    // buttons — "Tutti" flips between every orbital shown and none shown;
+    // "Valenza" flips between isolating the valence set and restoring every
+    // orbital. Their pressed state is derived from the actual node
+    // visibility each time (see syncConfiguration()), so they stay correct
+    // even when a grid cell changes visibility instead.
     const actions = document.createElement('div');
     actions.className = 'configuration-actions';
-    for (const [key, visible, lines, nodes] of [
-      ['all', true, ['Mostra tutti', 'gli orbitali'], this.objects],
-      ['all', false, ['Nascondi tutti', 'gli orbitali'], this.objects],
-      ['valence', true, ['Mostra gli', 'orbitali di valenza'], this.valenceObjects],
-      ['valence', false, ['Nascondi gli', 'orbitali di valenza'], this.valenceObjects],
-    ]) {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'configuration-toggle selection-toggle';
-      button.dataset.selection = key;
-      button.dataset.action = visible ? 'show' : 'hide';
-      button.lang = 'it';
-      button.setAttribute('aria-label', lines.join(' '));
-      for (const text of lines) {
-        const line = document.createElement('span');
-        line.textContent = text;
-        button.append(line);
+
+    const allToggle = this.allToggleButton = document.createElement('button');
+    allToggle.type = 'button';
+    allToggle.className = 'configuration-toggle selection-toggle';
+    allToggle.dataset.selection = 'all';
+    allToggle.lang = 'it';
+    allToggle.textContent = 'Tutti';
+    allToggle.setAttribute('aria-label', 'Mostra o nascondi tutti gli orbitali');
+    allToggle.disabled = !this.objects.length;
+    allToggle.addEventListener('click', () => {
+      const showAll = !(this.objects.length && this.objects.every((node) => node.visible));
+      this.setObjectsVisible(this.objects, showAll);
+    });
+    actions.append(allToggle);
+
+    const valenceToggle = this.valenceToggleButton = document.createElement('button');
+    valenceToggle.type = 'button';
+    valenceToggle.className = 'configuration-toggle selection-toggle';
+    valenceToggle.dataset.selection = 'valence';
+    valenceToggle.lang = 'it';
+    valenceToggle.textContent = 'Valenza';
+    valenceToggle.setAttribute('aria-label', 'Mostra solo gli orbitali di valenza, o torna a mostrarli tutti');
+    valenceToggle.disabled = !this.valenceObjects.length;
+    valenceToggle.title = this.valenceDescription;
+    valenceToggle.addEventListener('click', () => {
+      if (this.isValenceOnlyVisible()) {
+        this.setObjectsVisible(this.objects, true);
+      } else {
+        const valence = new Set(this.valenceObjects);
+        this.setObjectsVisible(this.objects.filter((node) => !valence.has(node)), false);
+        this.setObjectsVisible(this.valenceObjects, true);
       }
-      button.disabled = !nodes.length;
-      if (key === 'valence') button.title = visible
-        ? 'Mostra solo gli orbitali di valenza e nasconde tutti gli altri.'
-        : this.valenceDescription;
-      button.addEventListener('click', () => {
-        if (key === 'valence' && visible) {
-          const valence = new Set(nodes);
-          this.setObjectsVisible(this.objects.filter(node => !valence.has(node)), false);
-        }
-        this.setObjectsVisible(nodes, visible);
-      });
-      actions.append(button);
-    }
+    });
+    actions.append(valenceToggle);
     row.append(actions);
     const grid = document.createElement('div');
     grid.className = 'configuration-grid';
@@ -444,10 +453,9 @@ class DesktopViewer extends Viewer {
       const description = group.electrons === null ? group.label
         : `${group.label}, ${group.electrons} electron${group.electrons === 1 ? '' : 's'}`;
       button.setAttribute('aria-label', description);
-      button.title = `Show / hide ${description}\n${group.nodes.map(node => node.name).join(', ')}${group.n !== null && group.electrons === null ? '\nElectron count unavailable without matching model metadata.' : ''}`;
+      button.title = `Show / hide ${description}\n${group.nodes.map(node => node.name).join(', ')}${group.n !== null && group.electrons === null ? '\nElectron count unavailable without matching model metadata.' : ''}\nPress and hold to isolate and zoom in.`;
       if (button.disabled) button.title = `${group.label}: unoccupied / not present in this model`;
-      button.addEventListener('click', () => {
-        if (button.disabled) return;
+      this.attachOrbitalControls(button, () => group.nodes, () => {
         const visible = !group.nodes.every(node => node.visible);
         this.setObjectsVisible(group.nodes, visible);
       });
@@ -520,6 +528,57 @@ class DesktopViewer extends Viewer {
     for (const item of this.orbitalMenuItems || []) {
       item.button.setAttribute('aria-pressed', item.nodes.length && item.nodes.every(node => node.visible) ? 'true' : item.nodes.some(node => node.visible) ? 'mixed' : 'false');
     }
+    if (this.allToggleButton) {
+      const allVisible = this.objects.length > 0 && this.objects.every((node) => node.visible);
+      this.allToggleButton.setAttribute('aria-pressed', String(allVisible));
+    }
+    if (this.valenceToggleButton) {
+      this.valenceToggleButton.setAttribute('aria-pressed', String(this.isValenceOnlyVisible()));
+    }
+  }
+
+  // True when exactly the valence set (and nothing else) is visible.
+  isValenceOnlyVisible() {
+    if (!this.valenceObjects.length) return false;
+    const valence = new Set(this.valenceObjects);
+    return this.objects.every((node) => node.visible === valence.has(node));
+  }
+
+  // Hides every orbital except `nodes` and fits the camera to what's left —
+  // used by the press-and-hold gesture below.
+  isolateNodes(nodes) {
+    const keep = new Set(nodes);
+    this.setObjectsVisible(this.objects.filter((node) => !keep.has(node)), false);
+    this.setObjectsVisible(nodes, true);
+  }
+
+  // Press-and-hold on a configuration button isolates its orbitals (hiding
+  // everything else) and zooms to them — a quick single-gesture shortcut,
+  // and the touch-friendly counterpart to right-click's "pick individually"
+  // menu, which has no touch equivalent. A plain click still just toggles
+  // this button's own orbitals via `onToggle`, unchanged.
+  attachOrbitalControls(button, getNodes, onToggle) {
+    const LONG_PRESS_MS = 500;
+    let timer = null;
+    let longPressed = false;
+    const cancelTimer = () => { if (timer) { clearTimeout(timer); timer = null; } };
+    button.addEventListener('pointerdown', (event) => {
+      if (button.disabled || event.button > 0) return;
+      longPressed = false;
+      cancelTimer();
+      timer = setTimeout(() => {
+        longPressed = true;
+        this.isolateNodes(getNodes());
+      }, LONG_PRESS_MS);
+    });
+    button.addEventListener('pointerup', cancelTimer);
+    button.addEventListener('pointerleave', cancelTimer);
+    button.addEventListener('pointercancel', cancelTimer);
+    button.addEventListener('click', () => {
+      if (longPressed) { longPressed = false; return; }
+      if (button.disabled) return;
+      onToggle();
+    });
   }
 
   setObjectsVisible(nodes, visible) {
@@ -762,7 +821,8 @@ class DesktopViewer extends Viewer {
       button.type = 'button';
       button.className = 'configuration-toggle';
       button.textContent = name;
-      button.addEventListener('click', () => {
+      button.title = 'Press and hold to isolate and zoom in.';
+      this.attachOrbitalControls(button, () => nodes, () => {
         const visible = !nodes.every(node => node.visible);
         this.setObjectsVisible(nodes, visible);
       });
