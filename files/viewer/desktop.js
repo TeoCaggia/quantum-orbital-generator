@@ -43,7 +43,7 @@ const PERIODIC_SERIES_MARKERS = [
 // the common panel scale then preserves the same proportions on screen.
 const PERIODIC_TYPOGRAPHY_RATIOS = {
   title: 0.4572,
-  symbol: 0.2353,
+  symbol: 0.294125,
   atomicNumber: 0.1775,
   seriesMarker: 0.3227,
   unavailableMessage: 0.2259,
@@ -632,6 +632,18 @@ class DesktopViewer extends Viewer {
     return boxes;
   }
 
+  modelCenter() {
+    if (!this.content) return new Vector3();
+    this.content.updateWorldMatrix(true, true);
+    const oneSBounds = new Box3();
+    for (const node of this.objects.filter(node => node.name === '1s')) {
+      if (!node.geometry.boundingBox) node.geometry.computeBoundingBox();
+      oneSBounds.union(node.geometry.boundingBox.clone().applyMatrix4(node.matrixWorld));
+    }
+    if (!oneSBounds.isEmpty()) return oneSBounds.getCenter(new Vector3());
+    return new Box3().setFromObject(this.content).getCenter(new Vector3());
+  }
+
   framingDistance(radius) {
     const camera = this.defaultCamera;
     const vFov = camera.getEffectiveFOV() * Math.PI / 180;
@@ -773,8 +785,13 @@ class DesktopViewer extends Viewer {
     this.setCamera('[default]');
     this.state.camera = '[default]';
     const box = new Box3().setFromObject(this.content);
-    const center = box.getCenter(new Vector3());
-    const radius = Math.max(box.getSize(new Vector3()).length() / 2, 0.000001);
+    const center = this.modelCenter();
+    const farthestCornerOffset = new Vector3(
+      Math.max(Math.abs(box.min.x - center.x), Math.abs(box.max.x - center.x)),
+      Math.max(Math.abs(box.min.y - center.y), Math.abs(box.max.y - center.y)),
+      Math.max(Math.abs(box.min.z - center.z), Math.abs(box.max.z - center.z)),
+    );
+    const radius = Math.max(farthestCornerOffset.length(), 0.000001);
     const camera = this.defaultCamera;
     // The default perspective opens 4/3 larger on screen than the neutral
     // framing. Orthogonal presets retain their established full-model fit.

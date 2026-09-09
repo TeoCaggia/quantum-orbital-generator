@@ -52,7 +52,7 @@ export class Viewer {
 			actionStates: {},
 			camera: DEFAULT_CAMERA,
 			axes: false,
-			autoRotate: false,
+			autoRotate: true,
 
 		};
 

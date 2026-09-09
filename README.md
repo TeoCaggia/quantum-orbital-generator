@@ -1,19 +1,8 @@
-# Atomic Orbital Generator and Viewer
+# Atomic Orbital Generator
 
 **English** · [Italiano](README.it.md)
 
-This project generates three-dimensional point-cloud models of the occupied atomic orbitals of neutral elements from H to Og and displays them in an interactive desktop viewer. It is an educational, physically motivated visualization based on hydrogen-like functions and Slater screening; it is not a many-electron quantum-chemistry calculation.
-
-## Requirements
-
-Use Python 3.10 or newer. From the project directory, install the generator and viewer dependencies:
-
-```powershell
-python -m pip install -r files/requirements.txt
-python -m pip install -r files/requirements-viewer.txt
-```
-
-The generator uses NumPy, SciPy, and trimesh. The desktop viewer uses PySide6, Qt WebEngine, and the bundled Three.js resources.
+This project generates three-dimensional point-cloud models of the occupied atomic orbitals of neutral elements from H to Og. It is an educational, physically motivated visualization based on hydrogen-like functions and Slater screening; it is not a many-electron quantum-chemistry calculation.
 
 ## Generating an element
 
@@ -38,7 +27,7 @@ output/C.glb
 output/json/C.json
 ```
 
-The JSON sidecar contains the element, electron configuration, generation method, orbital occupations, effective charges, point counts, nodal information, and estimated volumes. Keep it with the model so the viewer can show the complete element information.
+The JSON sidecar contains the element, electron configuration, generation method, orbital occupations, effective charges, point counts, nodal information, and estimated volumes.
 
 ### Command options
 
@@ -127,39 +116,3 @@ The JSON reports voxel estimates of each displayed orbital volume in `a0³` and 
 ### Limits of interpretation
 
 The generator does not perform Hartree–Fock or density-functional calculations and does not include electron correlation, relativistic corrections, spin-orbit coupling, molecular orbitals, ionic charge, or isotope-dependent electronic structure. Colors identify angular momentum only: `s` red, `p` yellow, `d` cyan, and `f` green. They do not encode wavefunction phase or electron spin.
-
-## Using the viewer
-
-Open the viewer without a model:
-
-```powershell
-python files/orbital_viewer.py
-```
-
-You can also run `viewer.cmd` on Windows, or open a specific model:
-
-```powershell
-python files/orbital_viewer.py output/C.glb
-viewer.cmd output/C.glb
-```
-
-The initial screen shows a periodic table. Selecting an element opens `output/<Symbol>.glb` when that file exists; otherwise a red message appears for three seconds. After loading a model, **Scegli un altro elemento** returns to the periodic table. `Ctrl+O` opens another local GLB/glTF file, and a file can also be dragged into the window.
-
-Mouse controls:
-
-- Drag to rotate.
-- `Shift` + drag to pan.
-- Use the mouse wheel to zoom.
-
-Useful keys:
-
-- `F`: restore the default full-model view.
-- `1`, `3`, `7`: front, side, and top views.
-- `F11`: toggle full screen.
-- `Esc`: close the individual-orbital menu.
-
-The right panels control automatic rotation, axes, full-view restoration, all orbitals, valence orbitals, and individual occupied subshells. Right-click a subshell containing multiple orbitals to control its spatial orbitals separately. Showing an orbital moves the camera smoothly toward it.
-
-The left panels show the Italian element name, atomic number, category, atomic mass, electron configuration, a Bohr diagram, and natural isotopic composition. The isotopic list reports abundance, protons, and neutrons from the bundled NIST-derived dataset and links to the source page. The Bohr diagram is schematic: its rings are shell labels rather than electron trajectories or metric orbital dimensions.
-
-At first load, every Bohr electron is inactive while the complete 3D model remains visible. Clicking the first Bohr electron isolates its corresponding orbital; later clicks add or remove orbitals. Clicking the nucleus alternates between element properties and isotopic composition. The default view keeps `Z` vertical, `X` horizontal on screen, and `Y` along the viewing direction; the displayed axes and orbital geometry use the same Cartesian frame.

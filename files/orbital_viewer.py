@@ -98,7 +98,7 @@ def launch_viewer(path: Path | None = None) -> int:
                          f'  "{sys.executable}" -m pip install -r "{Path(__file__).with_name("requirements-viewer.txt")}"') from error
 
     if not (ASSETS / 'vendor/three/build/three.module.js').is_file():
-        raise SystemExit('Bundled viewer libraries are missing. See files/viewer/README.md to restore them.')
+        raise SystemExit('Bundled viewer libraries are missing.')
 
     app = QApplication.instance() or QApplication(sys.argv[:1])
     app.setApplicationName('Orbital GLB / glTF Viewer')
