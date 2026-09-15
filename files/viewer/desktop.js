@@ -488,6 +488,10 @@ class DesktopViewer extends Viewer {
     secondaryHint.className = 'configuration-hint configuration-hint-secondary';
     secondaryHint.textContent = 'Click destro sui riquadri per\nscegliere i singoli orbitali';
     row.append(secondaryHint);
+    const isolateHint = document.createElement('p');
+    isolateHint.className = 'configuration-hint configuration-hint-secondary';
+    isolateHint.textContent = 'Tieni premuto su un riquadro per\nisolare gli orbitali';
+    row.append(isolateHint);
     this.visibilityFolder.__ul.append(row);
     // Appending an existing node moves it after the freshly rebuilt orbital
     // panel, keeping this action at the bottom after every model change.
