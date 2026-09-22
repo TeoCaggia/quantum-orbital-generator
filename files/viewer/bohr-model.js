@@ -193,7 +193,6 @@ export class BohrModel {
     this.typeNextButton.type = 'button';
     this.typeNextButton.className = 'element-type-next';
     this.typeNextButton.dataset.direction = 'forward';
-    this.typeNextButton.title = 'Mostra composizione isotopica';
     this.typeNextButton.setAttribute('aria-label', 'Mostra composizione isotopica');
     this.typeNextButton.addEventListener('click', () => this.advanceTypePage());
     this.typeCard.append(this.typeViewport, this.typeNextButton);
@@ -389,7 +388,6 @@ export class BohrModel {
         ? 'Mostra composizione isotopica'
         : 'Torna alle caratteristiche dell’elemento';
       this.typeNextButton.dataset.direction = nextIndex === 0 ? 'forward' : 'back';
-      this.typeNextButton.title = label;
       this.typeNextButton.setAttribute('aria-label', label);
       this.typeNextButton.disabled = false;
       this.typePageAnimating = false;

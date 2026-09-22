@@ -61,6 +61,16 @@ await Promise.all([
 
 let bridge;
 document.addEventListener('contextmenu', event => event.preventDefault());
+// Prevent Chromium's page zoom everywhere, including over panels and the
+// bottom action buttons. Ordinary wheel events still control the 3D model.
+document.addEventListener('wheel', event => {
+  if (!event.ctrlKey) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+}, { capture: true, passive: false });
+for (const type of ['gesturestart', 'gesturechange', 'gestureend']) {
+  document.addEventListener(type, event => event.preventDefault(), { passive: false });
+}
 const channel = new Promise(resolve => new QWebChannel(qt.webChannelTransport, c => resolve(c.objects.desktop)));
 
 class DesktopViewer extends Viewer {
@@ -115,7 +125,6 @@ class DesktopViewer extends Viewer {
       button.style.gridRow = String(row);
       button.style.gridColumn = String(column);
       button.style.setProperty('--element-color', category.color);
-      button.title = `${symbol} · ${category.singular}`;
       button.setAttribute('aria-label', `${symbol}, numero atomico ${atomicNumber}, ${category.singular}`);
       const number = document.createElement('span');
       number.className = 'periodic-element-number';
@@ -186,6 +195,32 @@ class DesktopViewer extends Viewer {
     restore.disabled = true;
     restore.addEventListener('click', () => this.fit('perspective'));
     displayPanel.append(restore);
+    const modelFileActions = document.createElement('div');
+    modelFileActions.className = 'model-file-actions';
+    modelFileActions.dataset.panel = 'model-file-actions';
+    modelFileActions.setAttribute('role', 'group');
+    modelFileActions.setAttribute('aria-label', 'Salvataggio modello');
+    const addModelFileAction = (label, icon, callback) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'configuration-toggle model-file-action';
+      button.setAttribute('aria-label', label);
+      button.innerHTML = icon;
+      button.addEventListener('click', callback);
+      modelFileActions.append(button);
+      return button;
+    };
+    addModelFileAction(
+      'Scarica il modello 3D',
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M5 20h14"/></svg>',
+      () => bridge.saveModel(),
+    );
+    addModelFileAction(
+      'Salva una foto del modello',
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5h3l1.5-2h7l1.5 2h3v11H4z"/><circle cx="12" cy="14" r="3.5"/></svg>',
+      () => bridge.saveSnapshot(this.captureSquareSnapshot()),
+    );
+    this.el.append(modelFileActions);
     this.elementPickerPanel = document.createElement('li');
     this.elementPickerPanel.className = 'configuration-row element-picker-panel';
     this.elementPickerPanel.dataset.panel = 'element-picker';
@@ -221,6 +256,31 @@ class DesktopViewer extends Viewer {
       button.setAttribute('aria-pressed', String(this.state[property]));
       button.textContent = this.state[property] ? onLabel : offLabel;
     }
+  }
+
+  captureSquareSnapshot() {
+    // Capture immediately after a render so the WebGL buffer contains exactly
+    // the current camera view. Drawing only the renderer canvas excludes every
+    // HTML control and panel from the exported image.
+    this.render();
+    const source = this.renderer.domElement;
+    const side = Math.min(source.width, source.height);
+    const snapshot = document.createElement('canvas');
+    snapshot.width = side;
+    snapshot.height = side;
+    const context = snapshot.getContext('2d');
+    context.drawImage(
+      source,
+      Math.floor((source.width - side) / 2),
+      Math.floor((source.height - side) / 2),
+      side,
+      side,
+      0,
+      0,
+      side,
+      side,
+    );
+    return snapshot.toDataURL('image/png');
   }
 
   fitControls() {
@@ -362,7 +422,6 @@ class DesktopViewer extends Viewer {
     this.prepareOrbitalMaterials();
     const valence = valenceSelection(this.objects);
     this.valenceObjects = valence.objects;
-    this.valenceDescription = valence.description;
     this.bohrModel.update(this.modelMetadata);
     // The complete 3D model is the neutral starting view. Bohr electrons begin
     // inactive so the first click becomes an explicit orbital selection.
@@ -412,7 +471,6 @@ class DesktopViewer extends Viewer {
     valenceToggle.textContent = 'Valenza';
     valenceToggle.setAttribute('aria-label', 'Mostra solo gli orbitali di valenza, o torna a mostrarli tutti');
     valenceToggle.disabled = !this.valenceObjects.length;
-    valenceToggle.title = this.valenceDescription;
     valenceToggle.addEventListener('click', () => {
       if (this.isValenceOnlyVisible()) {
         this.setObjectsVisible(this.objects, true);
@@ -453,8 +511,6 @@ class DesktopViewer extends Viewer {
       const description = group.electrons === null ? group.label
         : `${group.label}, ${group.electrons} electron${group.electrons === 1 ? '' : 's'}`;
       button.setAttribute('aria-label', description);
-      button.title = `Show / hide ${description}\n${group.nodes.map(node => node.name).join(', ')}${group.n !== null && group.electrons === null ? '\nElectron count unavailable without matching model metadata.' : ''}\nPress and hold to isolate and zoom in.`;
-      if (button.disabled) button.title = `${group.label}: unoccupied / not present in this model`;
       this.attachOrbitalControls(button, () => group.nodes, () => {
         const visible = !group.nodes.every(node => node.visible);
         this.setObjectsVisible(group.nodes, visible);
@@ -462,7 +518,6 @@ class DesktopViewer extends Viewer {
       if (new Set(group.nodes.map(node => node.name)).size > 1) {
         button.setAttribute('aria-haspopup', 'dialog');
         button.setAttribute('aria-expanded', 'false');
-        button.title += '\nRight-click to show or hide individual orbitals.';
         button.addEventListener('contextmenu', event => {
           event.preventDefault();
           event.stopPropagation();
@@ -825,7 +880,6 @@ class DesktopViewer extends Viewer {
       button.type = 'button';
       button.className = 'configuration-toggle';
       button.textContent = name;
-      button.title = 'Press and hold to isolate and zoom in.';
       this.attachOrbitalControls(button, () => nodes, () => {
         const visible = !nodes.every(node => node.visible);
         this.setObjectsVisible(nodes, visible);

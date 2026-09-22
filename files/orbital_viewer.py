@@ -2,11 +2,14 @@
 from __future__ import annotations
 
 import argparse
+import base64
+import binascii
 import functools
 import json
 import mimetypes
 from pathlib import Path
 import secrets
+import shutil
 import sys
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -87,7 +90,7 @@ class AssetHandler(BaseHTTPRequestHandler):
 
 def launch_viewer(path: Path | None = None) -> int:
     try:
-        from PySide6.QtCore import QObject, Qt, QUrl, Slot
+        from PySide6.QtCore import QEvent, QObject, QStandardPaths, Qt, QUrl, Slot
         from PySide6.QtGui import QAction, QColor, QDesktopServices, QKeySequence, QFont, QFontDatabase
         from PySide6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMessageBox
         from PySide6.QtWebChannel import QWebChannel
@@ -134,6 +137,28 @@ def launch_viewer(path: Path | None = None) -> int:
             if level == QWebEnginePage.JavaScriptConsoleMessageLevel.ErrorMessageLevel:
                 print(f'Viewer: {message} ({source}:{line})', file=sys.stderr)
 
+    class FixedZoomWebView(QWebEngineView):
+        """Keep trackpad pinch gestures from changing the HTML interface scale."""
+
+        def wheelEvent(self, event):
+            # Chromium exposes Windows precision-touchpad pinch as Ctrl+wheel.
+            # Ordinary wheel/two-finger scrolling still reaches the 3D controls.
+            if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+                self.setZoomFactor(1.0)
+                event.accept()
+                return
+            super().wheelEvent(event)
+
+        def event(self, event):
+            # Some trackpad drivers deliver the same interaction as a native
+            # zoom gesture instead of a synthesized Ctrl+wheel event.
+            if (event.type() == QEvent.Type.NativeGesture
+                    and event.gestureType() == Qt.NativeGestureType.ZoomNativeGesture):
+                self.setZoomFactor(1.0)
+                event.accept()
+                return True
+            return super().event(event)
+
     class Bridge(QObject):
         @Slot(str)
         def openExternal(self, url):
@@ -156,6 +181,53 @@ def launch_viewer(path: Path | None = None) -> int:
                 window.open_model(filename)
             else:
                 window.page.runJavaScript('window.showMissingModelMessage?.()')
+
+        @Slot()
+        def saveModel(self):
+            if not window.current_path or not window.current_path.is_file():
+                return
+            downloads = QStandardPaths.writableLocation(
+                QStandardPaths.StandardLocation.DownloadLocation)
+            initial = Path(downloads) if downloads else window.current_path.parent
+            suggested = initial / window.current_path.name
+            extension = window.current_path.suffix.lower()
+            file_filter = 'GLB models (*.glb)' if extension == '.glb' else 'glTF models (*.gltf)'
+            filename, _ = QFileDialog.getSaveFileName(
+                window, 'Salva il modello 3D', str(suggested), file_filter)
+            if not filename:
+                return
+            destination = Path(filename)
+            if not destination.suffix:
+                destination = destination.with_suffix(extension)
+            try:
+                if destination.resolve() != window.current_path.resolve():
+                    shutil.copy2(window.current_path, destination)
+                window.statusBar().showMessage(f'Modello salvato in {destination}', 5000)
+            except OSError as error:
+                QMessageBox.warning(window, 'Impossibile salvare il modello', str(error))
+
+        @Slot(str)
+        def saveSnapshot(self, data_url):
+            prefix = 'data:image/png;base64,'
+            if not window.current_path or not data_url.startswith(prefix):
+                return
+            downloads = QStandardPaths.writableLocation(
+                QStandardPaths.StandardLocation.DownloadLocation)
+            initial = Path(downloads) if downloads else window.current_path.parent
+            suggested = initial / f'{window.current_path.stem}.png'
+            filename, _ = QFileDialog.getSaveFileName(
+                window, 'Salva la foto del modello', str(suggested), 'PNG images (*.png)')
+            if not filename:
+                return
+            destination = Path(filename)
+            if destination.suffix.lower() != '.png':
+                destination = destination.with_suffix('.png')
+            try:
+                image = base64.b64decode(data_url[len(prefix):], validate=True)
+                destination.write_bytes(image)
+                window.statusBar().showMessage(f'Foto salvata in {destination}', 5000)
+            except (binascii.Error, OSError) as error:
+                QMessageBox.warning(window, 'Impossibile salvare la foto', str(error))
 
         @Slot()
         def elementPickerShown(self):
@@ -203,7 +275,8 @@ def launch_viewer(path: Path | None = None) -> int:
             self.resize(1280, 820)
             self.setMinimumSize(720, 480)
             self.setAcceptDrops(True)
-            self.web = QWebEngineView(self)
+            self.web = FixedZoomWebView(self)
+            self.web.setZoomFactor(1.0)
             self.web.setAcceptDrops(False)
             # Forward native context-menu coordinates to the page's selector.
             self.web.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
@@ -228,7 +301,6 @@ def launch_viewer(path: Path | None = None) -> int:
                                           ('Side', 'side', '3'), ('Top', 'top', '7')]:
                 action = QAction(label, self)
                 action.setShortcut(QKeySequence(shortcut))
-                action.setToolTip(f'{label} view ({shortcut})')
                 action.triggered.connect(functools.partial(self.set_view, view))
                 action.setEnabled(False)
                 self.addAction(action)  # Keep keyboard shortcuts.
