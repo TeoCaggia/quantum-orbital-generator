@@ -25,6 +25,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { GUI } from 'dat.gui';
 
 const DEFAULT_CAMERA = '[default]';
+const AXES_SCREEN_LENGTH_PX = 280;
 
 const MANAGER = new LoadingManager();
 const THREE_PATH = new URL('./vendor/three', import.meta.url).href;
@@ -90,6 +91,7 @@ export class Viewer {
 		this.morphFolder = null;
 		this.morphCtrls = [];
 		this.axesHelper = null;
+		this.axesCameraPosition = new Vector3();
 
 		this.addGUI();
 
@@ -111,7 +113,30 @@ export class Viewer {
 	}
 
 	render() {
+		this.updateAxesScreenScale();
 		this.renderer.render(this.scene, this.activeCamera);
+	}
+
+	updateAxesScreenScale() {
+		if (!this.axesHelper || !this.activeCamera) return;
+		const camera = this.activeCamera;
+		const viewportHeight = Math.max(1, this.el.clientHeight);
+		camera.updateMatrixWorld();
+		this.axesHelper.getWorldPosition(this.axesCameraPosition);
+		this.axesCameraPosition.applyMatrix4(camera.matrixWorldInverse);
+		let worldScale = this.axesSize;
+		if (camera.isPerspectiveCamera) {
+			const depth = Math.max(Math.abs(this.axesCameraPosition.z), camera.near || 1e-9);
+			const verticalFov = camera.getEffectiveFOV() * Math.PI / 180;
+			worldScale = 2 * depth * Math.tan(verticalFov / 2)
+				* AXES_SCREEN_LENGTH_PX / viewportHeight;
+		} else if (camera.isOrthographicCamera) {
+			const visibleWorldHeight = Math.abs(camera.top - camera.bottom) / Math.max(camera.zoom, 1e-9);
+			worldScale = visibleWorldHeight * AXES_SCREEN_LENGTH_PX / viewportHeight;
+		}
+		if (Number.isFinite(worldScale) && worldScale > 0) {
+			this.axesHelper.scale.setScalar(worldScale);
+		}
 	}
 
 	async load(url) {

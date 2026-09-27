@@ -96,9 +96,10 @@ export function shellElectronAssignments(metadata) {
 }
 
 export class BohrModel {
-  constructor(container, onChangeSelection = null, openExternal = null) {
+  constructor(container, onChangeSelection = null, openExternal = null, showInfo = null) {
     this.onChangeSelection = onChangeSelection;
     this.openExternal = openExternal;
+    this.showInfo = showInfo;
     this.activeElectronKeys = new Set();
     this.electronHitAreas = [];
     this.nucleusHitArea = null;
@@ -127,12 +128,7 @@ export class BohrModel {
 
     this.typeCard = document.createElement('section');
     this.typeCard.className = 'element-type-card';
-    this.typeCard.setAttribute('aria-label', 'Tipologia dell’elemento');
-    this.typeLabel = document.createElement('div');
-    this.typeLabel.className = 'element-type-label';
-    this.typeLabel.textContent = 'TIPOLOGIA';
-    this.typeValue = document.createElement('div');
-    this.typeValue.className = 'element-type-value';
+    this.typeCard.setAttribute('aria-label', 'Dati dell’elemento');
     this.massLabel = document.createElement('div');
     this.massLabel.className = 'element-type-label element-mass-label';
     this.massLabel.textContent = 'MASSA ATOMICA';
@@ -147,8 +143,6 @@ export class BohrModel {
     this.typeDetailsPage.className = 'element-type-page element-type-details-page is-current';
     this.typeDetailsPage.setAttribute('aria-hidden', 'false');
     this.typeDetailsPage.append(
-      this.typeLabel,
-      this.typeValue,
       this.massLabel,
       this.massValue,
       this.configurationLabel,
@@ -203,7 +197,22 @@ export class BohrModel {
 
     this.title = document.createElement('div');
     this.title.className = 'bohr-title';
-    this.title.textContent = 'Modello a orbite di Bohr';
+    this.titleText = document.createElement('span');
+    this.titleText.textContent = 'Modello atomico di Bohr';
+    this.infoButton = document.createElement('button');
+    this.infoButton.type = 'button';
+    this.infoButton.className = 'panel-info-button';
+    this.infoButton.setAttribute('aria-label', 'Informazioni sul modello atomico di Bohr');
+    this.infoButton.textContent = 'i';
+    this.infoButton.addEventListener('click', () => this.showInfo?.(
+      'Informazioni sul modello atomico di Bohr',
+      [
+        'Clicca gli elettroni per visualizzare\no nascondere gli orbitali corrispondenti',
+        'Clicca il nucleo per visualizzare\nla composizione isotopica',
+      ],
+      this.infoButton,
+    ));
+    this.title.append(this.titleText, this.infoButton);
 
     this.content = document.createElement('div');
     this.content.className = 'bohr-content';
@@ -247,19 +256,7 @@ export class BohrModel {
     });
     this.content.append(this.canvas);
 
-    this.hint = document.createElement('p');
-    this.hint.className = 'bohr-hint';
-    this.hint.textContent = 'Clicca gli elettroni per visualizzare\no nascondere gli orbitali corrispondenti';
-
-    this.nucleusHint = document.createElement('p');
-    this.nucleusHint.className = 'bohr-hint bohr-hint-secondary';
-    this.nucleusHint.textContent = 'Clicca il nucleo per visualizzare\nla composizione isotopica';
-
-    this.hints = document.createElement('div');
-    this.hints.className = 'bohr-hints';
-    this.hints.append(this.hint, this.nucleusHint);
-
-    this.drawer.append(this.title, this.content, this.hints);
+    this.drawer.append(this.title, this.content);
     this.panelGroup.append(this.identity, this.typeCard, this.drawer);
     container.append(this.panelGroup);
     this.metadata = null;
@@ -281,7 +278,6 @@ export class BohrModel {
     this.identity.setAttribute('aria-label', `${symbol}, ${italianName}${atomicNumber === null ? '' : `, numero atomico ${atomicNumber}`}`);
     this.populateNaturalIsotopes(symbol, atomicNumber);
     const category = elementCategory(symbol);
-    this.typeValue.textContent = category.singular;
     const atomicMass = elementAtomicMass(symbol);
     this.massValue.textContent = atomicMass ? `${atomicMass} Da` : '—';
     const configuration = electronConfiguration(metadata);
@@ -300,7 +296,7 @@ export class BohrModel {
       this.configurationValue.textContent = '—';
     }
     const configurationText = configuration.map(({ label, electrons }) => `${label}${electrons}`).join(' ');
-    this.typeCard.setAttribute('aria-label', `Tipologia: ${category.singular}. Massa atomica: ${atomicMass || 'non disponibile'}. Configurazione elettronica: ${configurationText || 'non disponibile'}`);
+    this.typeCard.setAttribute('aria-label', `Massa atomica: ${atomicMass || 'non disponibile'}. Configurazione elettronica: ${configurationText || 'non disponibile'}`);
     const count = shells.reduce((sum, [, electrons]) => sum + electrons, 0);
     const description = `Modello di Bohr di ${symbol}, ${category.name}: ${count} elettroni in ${shells.length} livelli`;
     this.canvas.dataset.description = description;

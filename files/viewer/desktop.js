@@ -4,6 +4,7 @@ import { Viewer } from './viewer.js';
 import { valenceSelection } from './valence.js';
 import { configurationGroups } from './configuration.js';
 import { BohrModel, elementCategory } from './bohr-model.js';
+import { elementAtomicRadius } from './element-atomic-radii.js';
 
 const ELEMENT_SYMBOLS = (
   'H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn ' +
@@ -11,6 +12,14 @@ const ELEMENT_SYMBOLS = (
   'Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn ' +
   'Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Db Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og'
 ).split(' ');
+
+const ATOMIC_SCALE_UNITS = Object.freeze([
+  { symbol: 'Å', factor: 1, metreExponent: -10, ariaName: 'ångström' },
+  { symbol: 'pm', factor: 100, metreExponent: -12, ariaName: 'picometri' },
+  { symbol: 'fm', factor: 100000, metreExponent: -15, ariaName: 'femtometri' },
+]);
+const ATOMIC_SCALE_RIGHT_EXTENT = 160;
+const ATOMIC_SCALE_PANEL_GAP = 4;
 
 const PERIODIC_LAYOUT = [];
 const addSequence = (row, column, symbols) => symbols.forEach((symbol, index) => {
@@ -77,10 +86,12 @@ class DesktopViewer extends Viewer {
   constructor(el) {
     super(el);
     this.loadId = 0;
+    this.createInformationPopup();
     this.bohrModel = new BohrModel(
       el,
       (orbitals, focusOrbital) => this.showOnlyOrbitals(orbitals, focusOrbital),
       url => bridge.openExternal(url),
+      (label, messages, trigger) => this.openInformationPopup(label, messages, trigger),
     );
     this.visibilityFolder = this.gui.addFolder('Electron configuration');
     this.visibilityFolder.open();
@@ -221,6 +232,78 @@ class DesktopViewer extends Viewer {
       () => bridge.saveSnapshot(this.captureSquareSnapshot()),
     );
     this.el.append(modelFileActions);
+    this.atomicScale = document.createElement('div');
+    this.atomicScale.className = 'atomic-scale';
+    this.atomicScale.setAttribute('role', 'group');
+    this.atomicScale.setAttribute('aria-hidden', 'true');
+    const scaleRuler = document.createElement('div');
+    scaleRuler.className = 'atomic-scale-ruler';
+    const arrow = document.createElement('span');
+    arrow.className = 'atomic-scale-arrow';
+    const topTick = document.createElement('span');
+    topTick.className = 'atomic-scale-tick atomic-scale-tick-top';
+    const centerTick = document.createElement('span');
+    centerTick.className = 'atomic-scale-tick atomic-scale-tick-center';
+    const bottomTick = document.createElement('span');
+    bottomTick.className = 'atomic-scale-tick atomic-scale-tick-bottom';
+    scaleRuler.append(arrow, topTick, centerTick, bottomTick);
+    this.atomicScaleTopValue = document.createElement('span');
+    this.atomicScaleTopValue.className = 'atomic-scale-number atomic-scale-number-top';
+    const zero = document.createElement('span');
+    zero.className = 'atomic-scale-number atomic-scale-number-center';
+    zero.textContent = '0';
+    this.atomicScaleBottomValue = document.createElement('span');
+    this.atomicScaleBottomValue.className = 'atomic-scale-number atomic-scale-number-bottom';
+    this.atomicScaleIntermediateTicks = document.createElement('div');
+    this.atomicScaleIntermediateTicks.className = 'atomic-scale-intermediate-ticks';
+    const unit = document.createElement('span');
+    unit.className = 'atomic-scale-unit';
+    const previousUnit = document.createElement('button');
+    previousUnit.type = 'button';
+    previousUnit.className = 'atomic-scale-unit-button atomic-scale-unit-previous';
+    previousUnit.setAttribute('aria-label', 'Unità di misura precedente');
+    previousUnit.textContent = '<';
+    const unitLabel = document.createElement('span');
+    unitLabel.className = 'atomic-scale-unit-label';
+    unitLabel.setAttribute('aria-live', 'polite');
+    const unitSymbol = document.createElement('span');
+    unitSymbol.className = 'atomic-scale-unit-symbol';
+    const unitConversion = document.createElement('span');
+    unitConversion.className = 'atomic-scale-unit-conversion';
+    unitLabel.append(unitSymbol, unitConversion);
+    const nextUnit = document.createElement('button');
+    nextUnit.type = 'button';
+    nextUnit.className = 'atomic-scale-unit-button atomic-scale-unit-next';
+    nextUnit.setAttribute('aria-label', 'Unità di misura successiva');
+    nextUnit.textContent = '>';
+    unit.append(previousUnit, unitLabel, nextUnit);
+    this.atomicScale.append(
+      scaleRuler,
+      this.atomicScaleIntermediateTicks,
+      this.atomicScaleTopValue,
+      zero,
+      this.atomicScaleBottomValue,
+      unit,
+    );
+    this.el.append(this.atomicScale);
+    this.atomicScaleLayout = '';
+    this.atomicScaleReference = null;
+    this.atomicScaleCenter = new Vector3();
+    this.atomicScaleRadius = null;
+    this.atomicScaleTickStep = null;
+    this.atomicScaleUnitIndex = 0;
+    this.atomicScaleUnitLabel = unitLabel;
+    this.atomicScaleUnitSymbol = unitSymbol;
+    this.atomicScaleUnitConversion = unitConversion;
+    this.updateAtomicScaleUnitLabel();
+    const changeUnit = direction => (event) => {
+      event.stopPropagation();
+      this.changeAtomicScaleUnit(direction);
+    };
+    previousUnit.addEventListener('pointerdown', event => event.stopPropagation());
+    nextUnit.addEventListener('pointerdown', event => event.stopPropagation());
+    previousUnit.addEventListener('click', changeUnit(-1));
+    nextUnit.addEventListener('click', changeUnit(1));
     this.elementPickerPanel = document.createElement('li');
     this.elementPickerPanel.className = 'configuration-row element-picker-panel';
     this.elementPickerPanel.dataset.panel = 'element-picker';
@@ -243,10 +326,60 @@ class DesktopViewer extends Viewer {
       if (this.orbitalMenu && !this.orbitalMenu.contains(event.target)) this.closeOrbitalMenu();
     });
     document.addEventListener('keydown', event => {
-      if (event.key === 'Escape') this.closeOrbitalMenu(true);
+      if (event.key !== 'Escape') return;
+      if (this.informationOverlay.classList.contains('is-open')) {
+        this.closeInformationPopup();
+      } else {
+        this.closeOrbitalMenu(true);
+      }
     });
     window.addEventListener('resize', () => this.closeOrbitalMenu());
     this.controls.addEventListener('start', () => { this.fitAnimation = null; });
+  }
+
+  createInformationPopup() {
+    this.informationOverlay = document.createElement('div');
+    this.informationOverlay.className = 'information-overlay';
+    this.informationOverlay.setAttribute('aria-hidden', 'true');
+    this.informationDialog = document.createElement('section');
+    this.informationDialog.className = 'information-dialog';
+    this.informationDialog.setAttribute('role', 'dialog');
+    this.informationDialog.setAttribute('aria-modal', 'true');
+    this.informationClose = document.createElement('button');
+    this.informationClose.type = 'button';
+    this.informationClose.className = 'information-dialog-close';
+    this.informationClose.setAttribute('aria-label', 'Chiudi informazioni');
+    this.informationClose.textContent = '×';
+    this.informationContent = document.createElement('div');
+    this.informationContent.className = 'information-dialog-content';
+    this.informationDialog.append(this.informationClose, this.informationContent);
+    this.informationOverlay.append(this.informationDialog);
+    this.el.append(this.informationOverlay);
+    this.informationClose.addEventListener('click', () => this.closeInformationPopup());
+    this.informationOverlay.addEventListener('click', (event) => {
+      if (event.target === this.informationOverlay) this.closeInformationPopup();
+    });
+  }
+
+  openInformationPopup(label, messages, trigger) {
+    this.informationReturnFocus = trigger;
+    this.informationDialog.setAttribute('aria-label', label);
+    this.informationContent.replaceChildren(...messages.map((message) => {
+      const paragraph = document.createElement('p');
+      paragraph.textContent = message;
+      return paragraph;
+    }));
+    this.informationOverlay.classList.add('is-open');
+    this.informationOverlay.setAttribute('aria-hidden', 'false');
+    requestAnimationFrame(() => this.informationClose.focus());
+  }
+
+  closeInformationPopup() {
+    if (!this.informationOverlay.classList.contains('is-open')) return;
+    this.informationOverlay.classList.remove('is-open');
+    this.informationOverlay.setAttribute('aria-hidden', 'true');
+    this.informationReturnFocus?.focus();
+    this.informationReturnFocus = null;
   }
 
   updateDisplay() {
@@ -317,6 +450,13 @@ class DesktopViewer extends Viewer {
     const availableHeight = Math.max(1, this.el.clientHeight - 20);
     let rightHeight = Math.max(1, this.gui.domElement.offsetHeight);
     let scale = Math.min(1, availableHeight / rightHeight);
+    let centeredTop = 10;
+    const setStableCustomProperty = (element, property, value, epsilon, unit = '') => {
+      const current = Number.parseFloat(element.style.getPropertyValue(property));
+      if (Number.isFinite(current) && Math.abs(current - value) <= epsilon) return false;
+      element.style.setProperty(property, `${value}${unit}`);
+      return true;
+    };
 
     if (leftPanel && this.content && leftPanel.offsetHeight) {
       // Match the layout width before applying the common scale. This also
@@ -331,7 +471,33 @@ class DesktopViewer extends Viewer {
       // right-hand stack is exactly as tall as the left-hand stack. The lower
       // bound leaves room for the element-picker panel without changing the
       // total height of the right-hand group.
-      const leftHeight = leftPanel.offsetHeight;
+      let leftHeight = leftPanel.offsetHeight;
+      const elementSymbol = leftPanel.querySelector('.element-identity-symbol');
+      if (elementSymbol) {
+        const symbolStyle = getComputedStyle(elementSymbol);
+        const currentFontSize = Number.parseFloat(symbolStyle.fontSize);
+        const currentLineHeight = Number.parseFloat(symbolStyle.lineHeight);
+        if (!this.elementSymbolBaseFontSize && currentFontSize > 0) {
+          this.elementSymbolBaseFontSize = currentFontSize;
+        }
+        const baseFontSize = this.elementSymbolBaseFontSize || currentFontSize;
+        if (baseFontSize > 0 && currentFontSize > 0 && currentLineHeight > 0) {
+          const lineHeightRatio = currentLineHeight / currentFontSize;
+          const heightWithoutSymbol = leftHeight - currentLineHeight;
+          const availableSymbolHeight = Math.max(0, availableHeight - heightWithoutSymbol);
+          const targetFontSize = Math.max(1,
+            Math.min(baseFontSize, availableSymbolHeight / lineHeightRatio));
+          if (setStableCustomProperty(
+            leftPanel,
+            '--element-symbol-font-size',
+            targetFontSize,
+            0.25,
+            'px',
+          )) {
+            leftHeight = leftPanel.offsetHeight;
+          }
+        }
+      }
       const orbitalButtons = [...rightPanel.querySelectorAll('.configuration-grid .configuration-toggle')];
       const orbitalRows = new Set(
         [...rightPanel.querySelectorAll('.configuration-grid .configuration-cell')]
@@ -344,24 +510,26 @@ class DesktopViewer extends Viewer {
         const currentButtonHeight = Number.parseFloat(getComputedStyle(orbitalButtons[0]).height)
           || baseButtonHeight;
         const baseRightHeight = rightHeight - orbitalRows * (currentButtonHeight - baseButtonHeight);
-        let buttonHeight = Math.max(minimumButtonHeight,
+        const buttonHeight = Math.max(minimumButtonHeight,
           baseButtonHeight + (leftHeight - baseRightHeight) / orbitalRows);
-        rightPanel.style.setProperty('--orbital-button-height', `${buttonHeight}px`);
-
-        // Offset-height is integer-rounded. One correction removes the possible
-        // final one-pixel difference without introducing a resize feedback loop.
-        rightHeight = Math.max(1, this.gui.domElement.offsetHeight);
-        buttonHeight = Math.max(minimumButtonHeight,
-          buttonHeight + (leftHeight - rightHeight) / orbitalRows);
-        rightPanel.style.setProperty('--orbital-button-height', `${buttonHeight}px`);
-        rightHeight = Math.max(1, this.gui.domElement.offsetHeight);
+        // ResizeObserver reports integer-rounded layout sizes. Rewriting a
+        // sub-pixel correction on every callback can alternate forever between
+        // two values and continuously invalidate the composited panel layers.
+        // A quarter-pixel dead band makes this calculation converge after the
+        // first real layout change while remaining visually exact.
+        if (setStableCustomProperty(rightPanel, '--orbital-button-height', buttonHeight, 0.25, 'px')) {
+          rightHeight = Math.max(1, this.gui.domElement.offsetHeight);
+        }
       }
 
       const commonHeight = Math.max(leftHeight, rightHeight);
       scale = Math.min(1, availableHeight / commonHeight);
-      leftPanel.style.setProperty('--panel-scale', scale);
+      centeredTop = Math.max(0, (this.el.clientHeight - commonHeight * scale) / 2);
+      setStableCustomProperty(leftPanel, '--panel-scale', scale, 0.001);
+      setStableCustomProperty(leftPanel, '--panel-top', centeredTop, 0.25, 'px');
     }
-    rightPanel.style.setProperty('--panel-scale', scale);
+    setStableCustomProperty(rightPanel, '--panel-scale', scale, 0.001);
+    setStableCustomProperty(rightPanel, '--panel-top', centeredTop, 0.25, 'px');
   }
 
   resize(event) {
@@ -419,10 +587,13 @@ class DesktopViewer extends Viewer {
     this.configurationRow?.remove();
     this.objects = [];
     object.traverse(node => { if (node.geometry) this.objects.push(node); });
+    this.atomicScaleReference = null;
+    this.atomicScaleCenter.copy(this.modelCenter());
     this.prepareOrbitalMaterials();
     const valence = valenceSelection(this.objects);
     this.valenceObjects = valence.objects;
     this.bohrModel.update(this.modelMetadata);
+    this.updateAtomicScaleValue();
     // The complete 3D model is the neutral starting view. Bohr electrons begin
     // inactive so the first click becomes an explicit orbital selection.
     this.bohrModel.setActiveOrbitals(new Set());
@@ -446,6 +617,8 @@ class DesktopViewer extends Viewer {
     // orbital. Their pressed state is derived from the actual node
     // visibility each time (see syncConfiguration()), so they stay correct
     // even when a grid cell changes visibility instead.
+    const actionsRow = document.createElement('div');
+    actionsRow.className = 'configuration-actions-row';
     const actions = document.createElement('div');
     actions.className = 'configuration-actions';
 
@@ -481,7 +654,22 @@ class DesktopViewer extends Viewer {
       }
     });
     actions.append(valenceToggle);
-    row.append(actions);
+    const informationButton = document.createElement('button');
+    informationButton.type = 'button';
+    informationButton.className = 'panel-info-button configuration-info-button';
+    informationButton.setAttribute('aria-label', 'Informazioni sui controlli della configurazione elettronica');
+    informationButton.textContent = 'i';
+    informationButton.addEventListener('click', () => this.openInformationPopup(
+      'Informazioni sulla configurazione elettronica',
+      [
+        'Clicca sui riquadri per visualizzare\no nascondere i set di orbitali occupati',
+        'Click destro sui riquadri per\nscegliere i singoli orbitali',
+        'Tieni premuto su un riquadro per\nisolare gli orbitali',
+      ],
+      informationButton,
+    ));
+    actionsRow.append(actions, informationButton);
+    row.append(actionsRow);
     const grid = document.createElement('div');
     grid.className = 'configuration-grid';
     grid.setAttribute('role', 'group');
@@ -535,18 +723,6 @@ class DesktopViewer extends Viewer {
       grid.append(cell);
     }
     row.append(grid);
-    const hint = document.createElement('p');
-    hint.className = 'configuration-hint';
-    hint.textContent = 'Clicca sui riquadri per visualizzare\no nascondere i set di orbitali occupati';
-    row.append(hint);
-    const secondaryHint = document.createElement('p');
-    secondaryHint.className = 'configuration-hint configuration-hint-secondary';
-    secondaryHint.textContent = 'Click destro sui riquadri per\nscegliere i singoli orbitali';
-    row.append(secondaryHint);
-    const isolateHint = document.createElement('p');
-    isolateHint.className = 'configuration-hint configuration-hint-secondary';
-    isolateHint.textContent = 'Tieni premuto su un riquadro per\nisolare gli orbitali';
-    row.append(isolateHint);
     this.visibilityFolder.__ul.append(row);
     // Appending an existing node moves it after the freshly rebuilt orbital
     // panel, keeping this action at the bottom after every model change.
@@ -567,6 +743,8 @@ class DesktopViewer extends Viewer {
     this.objects = [];
     this.valenceObjects = [];
     this.configurationGroups = [];
+    this.atomicScaleReference = null;
+    this.hideAtomicScale();
     if (this.axesHelper) {
       this.scene.remove(this.axesHelper);
       this.axesHelper.dispose();
@@ -750,6 +928,245 @@ class DesktopViewer extends Viewer {
     return boxes;
   }
 
+  atomicScaleUnit() {
+    return ATOMIC_SCALE_UNITS[this.atomicScaleUnitIndex];
+  }
+
+  updateAtomicScaleUnitLabel() {
+    const unit = this.atomicScaleUnit();
+    this.atomicScaleUnitSymbol.textContent = unit.symbol;
+    this.atomicScaleUnitConversion.textContent = `(1e${unit.metreExponent} m)`;
+  }
+
+  changeAtomicScaleUnit(direction) {
+    const previousStep = this.atomicScaleTickStep ?? 0.25;
+    this.atomicScaleUnitIndex = (
+      this.atomicScaleUnitIndex + direction + ATOMIC_SCALE_UNITS.length
+    ) % ATOMIC_SCALE_UNITS.length;
+    this.updateAtomicScaleUnitLabel();
+    this.updateAtomicScaleValue(previousStep);
+    for (const animation of this.atomicScaleUnitLabel.getAnimations?.() ?? []) animation.cancel();
+    this.atomicScaleUnitLabel.animate?.([
+      { opacity: 0, transform: `translateX(${direction * 18}px)` },
+      { opacity: 1, transform: 'translateX(0)' },
+    ], {
+      duration: 220,
+      easing: 'cubic-bezier(.2,.8,.2,1)',
+    });
+  }
+
+  formatAtomicScaleMagnitude(valueInAngstroms) {
+    const converted = Math.abs(valueInAngstroms) * this.atomicScaleUnit().factor;
+    if (!converted) return '0';
+    const exponent = Math.floor(Math.log10(converted));
+    if (exponent > 3 || exponent < -3) {
+      const coefficient = converted / (10 ** exponent);
+      const coefficientText = coefficient.toLocaleString('it-IT', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+        useGrouping: false,
+      });
+      return `${coefficientText}e${exponent}`;
+    }
+    return converted.toLocaleString('it-IT', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 3,
+      useGrouping: false,
+    });
+  }
+
+  updateAtomicScaleValue(initialStep = 0.25) {
+    const symbol = this.modelMetadata?.element;
+    const radius = elementAtomicRadius(symbol);
+    this.atomicScaleRadius = radius;
+    this.atomicScaleTickStep = null;
+    if (radius === null) {
+      this.atomicScaleIntermediateTicks.replaceChildren();
+      this.atomicScaleTopValue.textContent = '—';
+      this.atomicScaleBottomValue.textContent = '—';
+      this.atomicScale.setAttribute('aria-label', `Raggio covalente a legame singolo di ${symbol || 'questo elemento'} non disponibile`);
+      return;
+    }
+    const halfRadius = radius / 2;
+    const halfValue = this.formatAtomicScaleMagnitude(halfRadius);
+    this.atomicScaleTopValue.textContent = `+${halfValue}`;
+    this.atomicScaleBottomValue.textContent = `−${halfValue}`;
+    this.renderAtomicScaleTicks(initialStep);
+    this.atomicScale.setAttribute('aria-label', `Scala del raggio covalente a legame singolo di ${symbol}: da meno ${halfValue} a più ${halfValue} ${this.atomicScaleUnit().ariaName}`);
+  }
+
+  renderAtomicScaleTicks(step) {
+    const radius = this.atomicScaleRadius;
+    if (!(radius > 0) || this.atomicScaleTickStep === step) return;
+    this.atomicScaleTickStep = step;
+    this.atomicScaleIntermediateTicks.replaceChildren();
+    const halfRadius = radius / 2;
+    // Once a finer level is active, the reference ticks of the previous level
+    // are already outside (or crossing) the viewport. Do not create thousands
+    // of farther, invisible DOM labels at the 0.005 and 0.001 Å levels.
+    const previousStep = new Map([
+      [0.05, 0.25],
+      [0.01, 0.05],
+      [0.005, 0.01],
+      [0.001, 0.005],
+    ]).get(step);
+    const visibleLimit = previousStep ?? halfRadius;
+    const addIntermediateTick = (value) => {
+      const position = (halfRadius - value) / radius * 100;
+      const tick = document.createElement('span');
+      tick.className = 'atomic-scale-intermediate-tick';
+      tick.style.top = `${position}%`;
+      this.atomicScaleIntermediateTicks.append(tick);
+      const label = document.createElement('span');
+      label.className = 'atomic-scale-intermediate-label';
+      label.style.top = `${position}%`;
+      const magnitude = this.formatAtomicScaleMagnitude(value);
+      label.textContent = value > 0 ? `+${magnitude}` : `−${magnitude}`;
+      this.atomicScaleIntermediateTicks.append(label);
+    };
+    for (let index = 1; index * step < halfRadius - 1e-9
+      && index * step <= visibleLimit + 1e-9; index += 1) {
+      const value = Math.round(index * step * 1000) / 1000;
+      addIntermediateTick(value);
+      addIntermediateTick(-value);
+    }
+  }
+
+  hideAtomicScale() {
+    this.atomicScale?.classList.remove('is-visible');
+    this.atomicScale?.setAttribute('aria-hidden', 'true');
+    this.atomicScaleLayout = '';
+  }
+
+  updateAtomicScale() {
+    if (!this.content || !this.objects?.length || !this.atomicScale) {
+      this.hideAtomicScale();
+      return;
+    }
+    const camera = this.activeCamera;
+    camera.updateMatrixWorld();
+    this.content.updateWorldMatrix(true, true);
+    const point = new Vector3();
+    const visibleNodes = [];
+    let totalPoints = 0;
+    for (const node of this.objects) {
+      let visible = true;
+      for (let parent = node; parent; parent = parent.parent) visible &&= parent.visible;
+      if (!visible || !node.geometry) continue;
+      const positions = node.geometry.attributes.position;
+      if (!positions?.count) continue;
+      visibleNodes.push({ node, positions });
+      totalPoints += positions.count;
+    }
+    if (!visibleNodes.length) {
+      this.hideAtomicScale();
+      return;
+    }
+    if (!this.atomicScaleReference) {
+      let top = Infinity;
+      let bottom = -Infinity;
+      // Measure the rendered cloud once. Subsequent frames derive the ruler
+      // height only from camera distance, so orbiting the camera cannot resize
+      // it while wheel zoom remains visually synchronized.
+      const projectionBudget = 12000;
+      for (const { node, positions } of visibleNodes) {
+        const sampleCount = Math.max(128, Math.round(projectionBudget * positions.count / totalPoints));
+        const step = Math.max(1, Math.ceil(positions.count / sampleCount));
+        for (let index = 0; index < positions.count; index += step) {
+          point.fromBufferAttribute(positions, index).applyMatrix4(node.matrixWorld).project(camera);
+          const screenY = (1 - point.y) * this.el.clientHeight / 2;
+          top = Math.min(top, screenY);
+          bottom = Math.max(bottom, screenY);
+        }
+        const last = positions.count - 1;
+        if (last % step) {
+          point.fromBufferAttribute(positions, last).applyMatrix4(node.matrixWorld).project(camera);
+          const screenY = (1 - point.y) * this.el.clientHeight / 2;
+          top = Math.min(top, screenY);
+          bottom = Math.max(bottom, screenY);
+        }
+      }
+      const distance = camera.position.distanceTo(this.controls.target);
+      if (!Number.isFinite(top) || !Number.isFinite(bottom) || bottom <= top || !(distance > 0)) {
+        this.hideAtomicScale();
+        return;
+      }
+      point.copy(this.atomicScaleCenter).project(camera);
+      const projectedCenter = (1 - point.y) * this.el.clientHeight / 2;
+      this.atomicScaleReference = {
+        centerYRatio: projectedCenter / this.el.clientHeight,
+        distance,
+        height: 2 * Math.max(projectedCenter - top, bottom - projectedCenter),
+        viewportHeight: this.el.clientHeight,
+      };
+    }
+    const currentDistance = camera.position.distanceTo(this.controls.target);
+    if (!(currentDistance > 0)) {
+      this.hideAtomicScale();
+      return;
+    }
+    const scaleHeight = this.atomicScaleReference.height
+      * this.atomicScaleReference.distance / currentDistance
+      * this.el.clientHeight / this.atomicScaleReference.viewportHeight;
+    // Keep the zero tick at the original model center. Zoom changes only the
+    // distance between ticks, never this vertical anchor.
+    const centerY = this.atomicScaleReference.centerYRatio * this.el.clientHeight;
+    if (this.atomicScaleRadius > 0) {
+      const tickPairVisibility = (step) => {
+        const offset = scaleHeight * step / this.atomicScaleRadius;
+        const positiveY = centerY - offset;
+        const negativeY = centerY + offset;
+        return {
+          bothOutside: positiveY < 0 && negativeY > this.el.clientHeight,
+          bothVisible: positiveY >= 0 && negativeY <= this.el.clientHeight,
+        };
+      };
+      const quarterTicks = tickPairVisibility(0.25);
+      const fiveHundredthTicks = tickPairVisibility(0.05);
+      const oneHundredthTicks = tickPairVisibility(0.01);
+      const fiveThousandthTicks = tickPairVisibility(0.005);
+      // Change level only after both reference ticks cross the viewport edge.
+      // In each asymmetric transition zone keep the current step so it cannot
+      // oscillate while the model is being zoomed.
+      if (this.atomicScaleTickStep === 0.25 && quarterTicks.bothOutside) {
+        this.renderAtomicScaleTicks(0.05);
+      } else if (this.atomicScaleTickStep === 0.05 && fiveHundredthTicks.bothOutside) {
+        this.renderAtomicScaleTicks(0.01);
+      } else if (this.atomicScaleTickStep === 0.05 && quarterTicks.bothVisible) {
+        this.renderAtomicScaleTicks(0.25);
+      } else if (this.atomicScaleTickStep === 0.01 && oneHundredthTicks.bothOutside) {
+        this.renderAtomicScaleTicks(0.005);
+      } else if (this.atomicScaleTickStep === 0.01 && fiveHundredthTicks.bothVisible) {
+        this.renderAtomicScaleTicks(0.05);
+      } else if (this.atomicScaleTickStep === 0.005 && fiveThousandthTicks.bothOutside) {
+        this.renderAtomicScaleTicks(0.001);
+      } else if (this.atomicScaleTickStep === 0.005 && oneHundredthTicks.bothVisible) {
+        this.renderAtomicScaleTicks(0.01);
+      } else if (this.atomicScaleTickStep === 0.001 && fiveThousandthTicks.bothVisible) {
+        this.renderAtomicScaleTicks(0.005);
+      }
+    }
+    const top = centerY - scaleHeight / 2;
+    const bottom = centerY + scaleHeight / 2;
+    const panelRect = this.gui.domElement.parentElement.getBoundingClientRect();
+    // Keep one fixed horizontal position sized for the widest femtometre label
+    // and the 18 px unit-change animation, plus a small panel margin.
+    const left = Math.max(
+      0,
+      panelRect.left - ATOMIC_SCALE_RIGHT_EXTENT - ATOMIC_SCALE_PANEL_GAP,
+    );
+    const rounded = [left, top, bottom - top].map(value => Math.round(value * 10) / 10);
+    const layout = rounded.join('|');
+    if (layout !== this.atomicScaleLayout) {
+      this.atomicScale.style.left = `${rounded[0]}px`;
+      this.atomicScale.style.top = `${rounded[1]}px`;
+      this.atomicScale.style.height = `${rounded[2]}px`;
+      this.atomicScaleLayout = layout;
+    }
+    this.atomicScale.classList.add('is-visible');
+    this.atomicScale.setAttribute('aria-hidden', 'false');
+  }
+
   modelCenter() {
     if (!this.content) return new Vector3();
     this.content.updateWorldMatrix(true, true);
@@ -834,6 +1251,7 @@ class DesktopViewer extends Viewer {
       }
     }
     super.render();
+    this.updateAtomicScale();
   }
 
   closeOrbitalMenu(restoreFocus = false) {
@@ -911,9 +1329,9 @@ class DesktopViewer extends Viewer {
     );
     const radius = Math.max(farthestCornerOffset.length(), 0.000001);
     const camera = this.defaultCamera;
-    // The default perspective opens 4/3 larger on screen than the neutral
-    // framing. Orthogonal presets retain their established full-model fit.
-    const distance = this.framingDistance(radius) * (view === 'perspective' ? 0.75 : 1);
+    // The default perspective opens 10% larger than its previous 4/3 framing.
+    // Orthogonal presets retain their established full-model fit.
+    const distance = this.framingDistance(radius) * (view === 'perspective' ? 0.75 / 1.1 : 1);
     const directions = { perspective: [0, -1, 0], front: [1, 0, 0], side: [0, 1, 0], top: [0, 0, 1] };
     this.controls.reset();
     // The default view uses Y as the viewing axis: Z remains vertical and X
