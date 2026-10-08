@@ -203,7 +203,7 @@ export class BohrModel {
     this.infoButton.type = 'button';
     this.infoButton.className = 'panel-info-button';
     this.infoButton.setAttribute('aria-label', 'Informazioni sul modello atomico di Bohr');
-    this.infoButton.textContent = 'i';
+    this.infoButton.textContent = '?';
     this.infoButton.addEventListener('click', () => this.showInfo?.(
       'Informazioni sul modello atomico di Bohr',
       [
@@ -539,7 +539,7 @@ export class BohrModel {
 
     // Cut a genuinely transparent gap in each orbit before placing its label.
     // Labels precede particles and nucleus, which remain legible if they overlap.
-    context.font = '400 14.4px Syne, system-ui, sans-serif';
+    context.font = '500 14.4px "Fira Code", monospace';
     context.textAlign = 'center';
     context.textBaseline = 'alphabetic';
     for (const { label, x, y } of shellLabelPositions) {

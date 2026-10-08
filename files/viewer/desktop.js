@@ -658,7 +658,7 @@ class DesktopViewer extends Viewer {
     informationButton.type = 'button';
     informationButton.className = 'panel-info-button configuration-info-button';
     informationButton.setAttribute('aria-label', 'Informazioni sui controlli della configurazione elettronica');
-    informationButton.textContent = 'i';
+    informationButton.textContent = '?';
     informationButton.addEventListener('click', () => this.openInformationPopup(
       'Informazioni sulla configurazione elettronica',
       [
